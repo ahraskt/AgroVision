@@ -1,0 +1,7 @@
+
+PlantDiseaseDataset/
+venv/
+.venv/
+__pycache__/
+.env
+*.pyc

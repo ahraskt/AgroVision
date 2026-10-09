@@ -1,0 +1,9 @@
+
+Flask
+gunicorn
+numpy
+Pillow
+scikit-learn
+joblib
+tensorflow
+mysql-connector-python

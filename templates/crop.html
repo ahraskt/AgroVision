@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <button onclick="goBack()" class="back-button">
+        ← Back
+    </button>
+
+
+    <div class="page-heading">
+
+        <div class="heading-icon">
+            🌱
+        </div>
+
+        <h1>
+            Crop Recommendation
+        </h1>
+
+        <p>
+            Enter your soil and environmental conditions
+            to find the most suitable crop.
+        </p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <form method="POST">
+
+
+            <div class="input-grid">
+
+
+                <!-- Nitrogen -->
+
+                <div class="input-group">
+
+                    <label>
+                        Nitrogen (N)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="N"
+                        placeholder="Enter nitrogen value"
+                        required>
+
+                </div>
+
+
+                <!-- Phosphorus -->
+
+                <div class="input-group">
+
+                    <label>
+                        Phosphorus (P)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="P"
+                        placeholder="Enter phosphorus value"
+                        required>
+
+                </div>
+
+
+                <!-- Potassium -->
+
+                <div class="input-group">
+
+                    <label>
+                        Potassium (K)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="K"
+                        placeholder="Enter potassium value"
+                        required>
+
+                </div>
+
+
+                <!-- pH -->
+
+                <div class="input-group">
+
+                    <label>
+                        Soil pH
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="pH"
+                        placeholder="Example: 6.5"
+                        min="0"
+                        max="14"
+                        required>
+
+                </div>
+
+
+                <!-- Rainfall -->
+
+                <div class="input-group">
+
+                    <label>
+                        Rainfall
+                    </label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="rainfall"
+                        placeholder="Enter rainfall"
+                        required>
+
+                </div>
+
+
+                <!-- Temperature -->
+
+                <div class="input-group">
+
+                    <label>
+                        Temperature (°C)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="any"
+                        name="temperature"
+                        placeholder="Example: 28"
+                        required>
+
+                </div>
+
+
+            </div>
+
+
+            <button type="submit"
+                    class="submit-button">
+
+                🌾 Recommend Crop
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    {% if error %}
+
+    <div class="error-box">
+
+        ⚠️ {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- RESULT -->
+
+    {% if recommended_crop %}
+
+    <div class="result-card">
+
+        <div class="result-icon">
+            🌱
+        </div>
+
+        <h2>
+            Recommended Crop
+        </h2>
+
+        <div class="crop-name">
+            {{ recommended_crop }}
+        </div>
+
+
+        {% if confidence %}
+
+        <p class="confidence">
+
+            Model Confidence:
+            <strong>{{ confidence }}%</strong>
+
+        </p>
+
+        {% endif %}
+
+
+        <p>
+            Based on the soil and environmental conditions
+            you provided, this crop is the most suitable
+            recommendation from the trained model.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+</section>
+
+{% endblock %}

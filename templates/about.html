@@ -1,0 +1,251 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <button onclick="goBack()" class="back-button">
+        ← Back
+    </button>
+
+    <div class="about-container">
+
+        <!-- Page Heading -->
+        <div class="page-heading">
+
+            <div class="heading-icon">
+                🌿
+            </div>
+
+            <h1>About Our Project</h1>
+
+            <p>
+                Crop Recommendation and Plant Disease Detection
+                System Using Machine Learning and CNN
+            </p>
+
+        </div>
+
+        <!-- Project Overview -->
+        <div class="about-card">
+
+            <h2>🌾 Project Overview</h2>
+
+            <p>
+                Agriculture plays an important role in our daily
+                lives and the economy. Selecting a suitable crop
+                and identifying plant diseases at an early stage
+                can help farmers make better farming decisions.
+            </p>
+
+            <p>
+                Our project, <strong>Crop Recommendation and Plant
+                Disease Detection System</strong>, is a web-based
+                agricultural support system that combines Machine
+                Learning and Deep Learning to provide useful
+                predictions to users.
+            </p>
+
+            <p>
+                The system contains two main modules: Crop
+                Recommendation and Plant Disease Detection.
+                The crop recommendation module analyzes soil and
+                environmental parameters to suggest a suitable crop.
+                The plant disease detection module analyzes an
+                uploaded leaf image to predict its plant category
+                and possible disease.
+            </p>
+
+            <p>
+                The website is developed using Python and Flask,
+                providing a simple interface through which users
+                can enter agricultural information, upload leaf
+                images, and view prediction results.
+            </p>
+
+        </div>
+
+        <!-- Main Features -->
+        <div class="about-grid">
+
+            <!-- Crop Recommendation -->
+            <div class="about-box">
+
+                <h3>🌱 Crop Recommendation</h3>
+
+                <p>
+                    This module recommends a suitable crop based
+                    on the agricultural parameters entered by
+                    the user.
+                </p>
+
+                <p>
+                    The inputs include Nitrogen (N), Phosphorus (P),
+                    Potassium (K), soil pH, rainfall and, where
+                    supported by the trained model, other
+                    environmental parameters such as temperature
+                    and humidity.
+                </p>
+
+                <p>
+                    A trained <strong>Random Forest
+                    classifier</strong> analyzes the input values
+                    and predicts the crop class that best matches
+                    the learned patterns in the training dataset.
+                </p>
+
+            </div>
+
+            <!-- Plant Disease Detection -->
+            <div class="about-box">
+
+                <h3>🍃 Plant Disease Detection</h3>
+
+                <p>
+                    This module helps identify possible plant
+                    diseases from a photograph of a leaf uploaded
+                    by the user.
+                </p>
+
+                <p>
+                    It uses a Convolutional Neural Network (CNN)
+                    based on the <strong>MobileNetV2</strong>
+                    architecture. The model is trained using
+                    labeled plant leaf images.
+                </p>
+
+                <p>
+                    The uploaded image is resized and preprocessed
+                    before being passed to the trained model.
+                    The model predicts the plant and disease class
+                    with the highest output score and displays
+                    the model confidence.
+                </p>
+
+            </div>
+
+            <!-- Machine Learning -->
+            <div class="about-box">
+
+                <h3>🧠 Machine Learning</h3>
+
+                <p>
+                    Machine Learning enables a computer to learn
+                    patterns from data and use those patterns to
+                    make predictions on new inputs.
+                </p>
+
+                <p>
+                    In this project, Random Forest is used for
+                    crop recommendation, while the trained
+                    MobileNetV2 deep learning model is used for
+                    plant disease classification.
+                </p>
+
+            </div>
+
+            <!-- Project Objectives -->
+            <div class="about-box">
+
+                <h3>🎯 Project Objectives</h3>
+
+                <p>
+                    To provide an easy-to-use digital platform
+                    that supports agricultural decision-making.
+                </p>
+
+                <p>
+                    The objectives are to recommend suitable crops,
+                    help users recognize possible plant diseases,
+                    present prediction results clearly, and
+                    demonstrate the practical use of Machine
+                    Learning and Deep Learning in agriculture.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Technologies Used -->
+        <div class="technology-card">
+
+            <h2>💻 Technologies Used</h2>
+
+            <div class="tech-list">
+
+                <span>Python</span>
+                <span>Flask</span>
+                <span>Scikit-learn</span>
+                <span>Random Forest</span>
+                <span>TensorFlow</span>
+                <span>Keras</span>
+                <span>CNN</span>
+                <span>MobileNetV2</span>
+                <span>NumPy</span>
+                <span>Pillow</span>
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>JavaScript</span>
+                <span>MySQL</span>
+
+            </div>
+
+        </div>
+
+        <!-- Project Workflow -->
+        <div class="about-card">
+
+            <h2>⚙️ How the System Works</h2>
+
+            <p>
+                <strong>Step 1 – Crop Recommendation:</strong>
+                The user enters the required soil and environmental
+                values. The trained Random Forest model processes
+                the values and returns a recommended crop.
+            </p>
+
+            <p>
+                <strong>Step 2 – Plant Disease Detection:</strong>
+                The user uploads a plant leaf image. The image is
+                preprocessed and analyzed by the MobileNetV2 model
+                to predict the plant and possible disease class.
+            </p>
+
+            <p>
+                <strong>Step 3 – Display Results:</strong>
+                The website presents the model's prediction and,
+                for disease detection, the model confidence score.
+                If configured, MySQL can store prediction history
+                for later review by an administrator.
+            </p>
+
+        </div>
+
+        <!-- Conclusion -->
+        <div class="about-card">
+
+            <h2>🌍 Conclusion</h2>
+
+            <p>
+                This project demonstrates how Machine Learning,
+                Deep Learning and web technologies can be combined
+                to develop an intelligent agricultural support
+                system. It aims to make crop recommendations and
+                plant disease predictions more accessible through
+                a simple website.
+            </p>
+
+            <p>
+                The predictions are intended to support farming
+                decisions and should be considered alongside
+                agricultural knowledge and expert advice.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

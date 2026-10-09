@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            🌾 Smart Agriculture • AI Powered
+        </div>
+
+        <h1>
+            CROP RECOMMENDATION
+            <span>&</span>
+            PLANT DISEASE DETECTION
+        </h1>
+
+        <h2>
+            Using Machine Learning and CNN
+        </h2>
+
+        <p>
+            Make smarter agricultural decisions using
+            Artificial Intelligence. Our system recommends
+            suitable crops based on soil and environmental
+            conditions and provides intelligent plant disease
+            detection.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="{{ url_for('crop') }}"
+               class="primary-button">
+
+                🌱 Crop Recommendation
+
+            </a>
+
+            <a href="{{ url_for('disease') }}"
+               class="secondary-button">
+
+                🔬 Plant Disease Detection
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="features">
+
+    <h2>
+        Smart Farming Starts Here
+    </h2>
+
+    <p class="section-text">
+        Explore our intelligent agricultural solutions.
+    </p>
+
+
+    <div class="feature-container">
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🌱
+            </div>
+
+            <h3>
+                Crop Recommendation
+            </h3>
+
+            <p>
+                Enter soil nutrients, pH, rainfall and
+                temperature to discover the most suitable
+                crop for cultivation.
+            </p>
+
+            <a href="{{ url_for('crop') }}">
+                Try Now →
+            </a>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🍃
+            </div>
+
+            <h3>
+                Plant Disease Detection
+            </h3>
+
+            <p>
+                Upload a plant image and use CNN-based
+                technology to identify plant diseases.
+            </p>
+
+            <a href="{{ url_for('disease') }}">
+                Explore →
+            </a>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🤖
+            </div>
+
+            <h3>
+                AI Powered
+            </h3>
+
+            <p>
+                Machine Learning and Deep Learning techniques
+                help provide intelligent agricultural insights.
+            </p>
+
+            <a href="{{ url_for('about') }}">
+                Learn More →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="admin-history-page">
+
+    <div class="admin-history-header">
+
+        <div>
+
+            <div class="admin-title-icon">
+                📊
+            </div>
+
+            <h1>
+                Admin Prediction History
+            </h1>
+
+            <p>
+                View all crop recommendation predictions
+                stored in the database.
+            </p>
+
+        </div>
+
+
+        <div class="admin-actions">
+
+            <a
+                href="{{ url_for('home') }}"
+                class="admin-home-button">
+
+                🏠 Home
+
+            </a>
+
+            <a
+                href="{{ url_for('admin_logout') }}"
+                class="admin-logout-button">
+
+                🚪 Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL RECORDS -->
+
+    <div class="record-summary">
+
+        <div class="summary-icon">
+            📈
+        </div>
+
+        <div>
+
+            <h3>
+                Total Predictions
+            </h3>
+
+            <strong>
+                {{ predictions|length }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY TABLE -->
+
+    <div class="history-table-container">
+
+        {% if predictions %}
+
+        <table class="history-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Date & Time</th>
+
+                    <th>Nitrogen</th>
+
+                    <th>Phosphorus</th>
+
+                    <th>Potassium</th>
+
+                    <th>pH</th>
+
+                    <th>Rainfall</th>
+
+                    <th>Temperature</th>
+
+                    <th>Recommended Crop</th>
+
+                    <th>Confidence</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for prediction in predictions %}
+
+                <tr>
+
+                    <td>
+                        {{ prediction.id }}
+                    </td>
+
+                    <td>
+                        {{ prediction.created_at }}
+                    </td>
+
+                    <td>
+                        {{ prediction.nitrogen }}
+                    </td>
+
+                    <td>
+                        {{ prediction.phosphorus }}
+                    </td>
+
+                    <td>
+                        {{ prediction.potassium }}
+                    </td>
+
+                    <td>
+                        {{ prediction.ph }}
+                    </td>
+
+                    <td>
+                        {{ prediction.rainfall }}
+                    </td>
+
+                    <td>
+                        {{ prediction.temperature }}
+                    </td>
+
+                    <td class="crop-result">
+
+                        🌱
+                        {{ prediction.predicted_crop }}
+
+                    </td>
+
+                    <td>
+
+                        {% if prediction.confidence %}
+
+                        <span class="confidence-badge">
+
+                            {{ prediction.confidence }}%
+
+                        </span>
+
+                        {% else %}
+
+                        N/A
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="no-history">
+
+            <div>
+                📭
+            </div>
+
+            <h2>
+                No Prediction History
+            </h2>
+
+            <p>
+                No crop recommendations have been stored
+                in the database yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <button
+        onclick="goBack()"
+        class="back-button">
+
+        ← Back
+
+    </button>
+
+</section>
+
+{% endblock %}
