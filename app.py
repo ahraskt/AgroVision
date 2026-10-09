@@ -48,6 +48,10 @@ CLASS_PATH = Path(
     r"D:\Project\plant_disease_model\class_names.json"
 )
 
+disease_model = tf.keras.models.load_model(MODEL_PATH)
+
+with open(CLASS_PATH, "r", encoding="utf-8") as file:
+    class_names = json.load(file)
 UPLOAD_FOLDER = Path(app.root_path) / "static" / "uploads"
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
