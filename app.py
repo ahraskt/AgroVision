@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import os
 BASE_DIR = Path(__file__).resolve().parent
 
 CROP_MODEL_PATH = BASE_DIR / "crop_recommendation_model.pkl"
