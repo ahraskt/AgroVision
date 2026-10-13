@@ -1,5 +1,32 @@
-from pathlib import Path
+# ============================================================
+# app.py  –  Crop Recommendation + Plant Disease Detection
+# ============================================================
+
+import io
+import json
 import os
+import uuid
+from pathlib import Path
+
+import joblib
+import mysql.connector
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from flask import (
+    Flask,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+from werkzeug.utils import secure_filename
+
+# ============================================================
+# PATHS  (all relative to this file – works on any machine)
+# ============================================================
+
 BASE_DIR = Path(__file__).resolve().parent
 
 CROP_MODEL_PATH = BASE_DIR / "crop_recommendation_model.pkl"
@@ -11,46 +38,18 @@ DISEASE_MODEL_PATH = (
 CLASS_NAMES_PATH = (
     BASE_DIR / "plant_disease_model" / "class_names.json"
 )
-import io
-import json
-from pathlib import Path
 
-import numpy as np
-import tensorflow as tf
-
-from flask import (
-    request,
-    render_template,
-    redirect,
-    url_for
-)
-from werkzeug.utils import secure_filename
-
-
-from flask import Flask, render_template, request, session, redirect, url_for
-import pandas as pd
-import joblib
-import mysql.connector
+# ============================================================
+# FLASK APP
+# ============================================================
 
 app = Flask(__name__)
 app.secret_key = "crop_project_secret_key_2026"
 
-# ==========================================
-# PLANT DISEASE MODEL
-# ==========================================
+# ============================================================
+# UPLOAD FOLDER
+# ============================================================
 
-MODEL_PATH = Path(
-    r"D:\Project\plant_disease_model\best_model.keras"
-)
-
-CLASS_PATH = Path(
-    r"D:\Project\plant_disease_model\class_names.json"
-)
-
-disease_model = tf.keras.models.load_model(MODEL_PATH)
-
-with open(CLASS_PATH, "r", encoding="utf-8") as file:
-    class_names = json.load(file)
 UPLOAD_FOLDER = Path(app.root_path) / "static" / "uploads"
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
@@ -59,51 +58,48 @@ app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024  # 8 MB
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 
-# Load the trained model once when Flask starts.
-disease_model = tf.keras.models.load_model(MODEL_PATH)
+# ============================================================
+# LOAD MODELS  (loaded once at startup)
+# ============================================================
 
-with open(CLASS_PATH, "r", encoding="utf-8") as file:
-    class_names = json.load(file)
+# Crop recommendation model
+crop_model = joblib.load(CROP_MODEL_PATH)
 
+# Plant disease model
+disease_model = tf.keras.models.load_model(DISEASE_MODEL_PATH)
 
-def allowed_file(filename):
-    return (
-        "." in filename
-        and filename.rsplit(".", 1)[1].lower()
-        in ALLOWED_EXTENSIONS
-    )
+with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as _f:
+    class_names = json.load(_f)
 
 # ============================================================
-# ADMIN LOGIN DETAILS
+# ADMIN CREDENTIALS
 # ============================================================
 
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin123"
 
 # ============================================================
-# LOAD ML MODEL
-# ============================================================
-import joblib
-
-crop_model = joblib.load(CROP_MODEL_PATH)
-model = joblib.load("crop_recommendation_model.pkl")
-
-
-# ============================================================
-# MYSQL CONNECTION
+# HELPERS
 # ============================================================
 
-import os
-import mysql.connector
-"""mysql connector code"""
+
+def allowed_file(filename: str) -> bool:
+    """Return True if the filename has an allowed image extension."""
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    )
+
+
 def get_db_connection():
+    """Create and return a MySQL connection from environment variables."""
     return mysql.connector.connect(
         host=os.environ["DB_HOST"],
         port=int(os.environ.get("DB_PORT", "4000")),
         user=os.environ["DB_USER"],
         password=os.environ["DB_PASSWORD"],
         database=os.environ.get("DB_NAME", "crop_project"),
-        ssl_ca=os.environ["DB_SSL_CA"]
+        ssl_ca=os.environ.get("DB_SSL_CA"),
     )
 
 
@@ -111,9 +107,9 @@ def get_db_connection():
 # HOME
 # ============================================================
 
+
 @app.route("/")
 def home():
-
     return render_template("index.html")
 
 
@@ -121,21 +117,18 @@ def home():
 # CROP RECOMMENDATION
 # ============================================================
 
+
 @app.route("/crop", methods=["GET", "POST"])
 def crop():
-
     recommended_crop = None
     confidence = None
     error = None
 
     if request.method == "POST":
-
         try:
-
             # ------------------------------------------------
-            # GET USER INPUT
+            # Read and validate user input
             # ------------------------------------------------
-
             N = float(request.form["N"])
             P = float(request.form["P"])
             K = float(request.form["K"])
@@ -143,50 +136,37 @@ def crop():
             rainfall = float(request.form["rainfall"])
             temperature = float(request.form["temperature"])
 
+            # ------------------------------------------------
+            # Build input DataFrame
+            # ------------------------------------------------
+            user_input = pd.DataFrame(
+                {
+                    "N": [N],
+                    "P": [P],
+                    "K": [K],
+                    "pH": [pH],
+                    "rainfall": [rainfall],
+                    "temperature": [temperature],
+                }
+            )
 
             # ------------------------------------------------
-            # CREATE INPUT DATAFRAME
+            # Predict
             # ------------------------------------------------
-
-            user_input = pd.DataFrame({
-                "N": [N],
-                "P": [P],
-                "K": [K],
-                "pH": [pH],
-                "rainfall": [rainfall],
-                "temperature": [temperature]
-            })
-
-
-            # ------------------------------------------------
-            # PREDICT CROP
-            # ------------------------------------------------
-
-            prediction = model.predict(user_input)
-
+            prediction = crop_model.predict(user_input)
             recommended_crop = prediction[0]
 
+            # ------------------------------------------------
+            # Confidence score
+            # ------------------------------------------------
+            if hasattr(crop_model, "predict_proba"):
+                probabilities = crop_model.predict_proba(user_input)
+                confidence = round(max(probabilities[0]) * 100, 2)
 
             # ------------------------------------------------
-            # MODEL CONFIDENCE
+            # Persist to MySQL
             # ------------------------------------------------
-
-            if hasattr(model, "predict_proba"):
-
-                probabilities = model.predict_proba(user_input)
-
-                confidence = round(
-                    max(probabilities[0]) * 100,
-                    2
-                )
-
-
-            # ------------------------------------------------
-            # SAVE DATA TO MYSQL
-            # ------------------------------------------------
-
             connection = get_db_connection()
-
             cursor = connection.cursor()
 
             sql = """
@@ -203,7 +183,6 @@ def crop():
                 )
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """
-
             values = (
                 N,
                 P,
@@ -212,48 +191,39 @@ def crop():
                 rainfall,
                 temperature,
                 str(recommended_crop),
-                confidence
+                confidence,
             )
 
             cursor.execute(sql, values)
-
             connection.commit()
-
             cursor.close()
             connection.close()
 
-
         except ValueError:
-
             error = "Please enter valid numerical values."
 
-
         except mysql.connector.Error as e:
-
             error = "Database error: " + str(e)
 
-
         except Exception as e:
-
+            app.logger.exception("Crop prediction failed")
             error = "Error: " + str(e)
-
 
     return render_template(
         "crop.html",
         recommended_crop=recommended_crop,
         confidence=confidence,
-        error=error
+        error=error,
     )
 
 
-
-# ==========================================
+# ============================================================
 # PLANT DISEASE DETECTION
-# ==========================================
+# ============================================================
+
 
 @app.route("/disease", methods=["GET", "POST"])
 def disease():
-
     prediction = None
     plant_name = None
     disease_name = None
@@ -262,8 +232,6 @@ def disease():
     error = None
 
     if request.method == "POST":
-
-        # 1. Check whether an image was uploaded
         uploaded_file = request.files.get("leaf_image")
 
         if uploaded_file is None or uploaded_file.filename == "":
@@ -274,16 +242,17 @@ def disease():
 
         else:
             try:
-                # 2. Read the image using TensorFlow
+                # 1. Read raw bytes
                 image_bytes = uploaded_file.read()
 
-                image = image = tf.keras.utils.load_img(
+                # 2. Decode into a PIL image
+                image = tf.keras.utils.load_img(
                     io.BytesIO(image_bytes),
                     target_size=(224, 224),
-                    color_mode="rgb"
-                    )
+                    color_mode="rgb",
+                )
 
-                # 3. Convert the image into a numerical array
+                # 3. Convert to NumPy array
                 image_array = tf.keras.utils.img_to_array(image)
 
                 # 4. Apply MobileNetV2 preprocessing
@@ -296,7 +265,7 @@ def disease():
                 # 5. Add batch dimension
                 image_array = np.expand_dims(image_array, axis=0)
 
-                # 6. Predict the class
+                # 6. Run inference
                 probabilities = disease_model.predict(
                     image_array, verbose=0
                 )[0]
@@ -307,7 +276,7 @@ def disease():
                     float(probabilities[best_index]) * 100, 2
                 )
 
-                # 7. Separate plant name and disease name
+                # 7. Split class name into plant / disease
                 if "___" in prediction:
                     plant_name, disease_name = prediction.split(
                         "___", 1
@@ -316,25 +285,21 @@ def disease():
                     plant_name = "Unknown"
                     disease_name = prediction
 
-                # 8. Save the uploaded image for displaying the result
+                # 8. Save the uploaded image so it can be displayed
                 safe_name = secure_filename(uploaded_file.filename)
                 if not safe_name:
                     safe_name = "leaf_image.jpg"
 
-                # Use a unique filename to avoid overwriting uploads.
-                import uuid
                 unique_name = f"{uuid.uuid4().hex}_{safe_name}"
                 save_path = UPLOAD_FOLDER / unique_name
-
-                # Re-save the original uploaded bytes.
                 save_path.write_bytes(image_bytes)
 
                 image_url = url_for(
                     "static",
-                    filename=f"uploads/{unique_name}"
+                    filename=f"uploads/{unique_name}",
                 )
 
-            except Exception as exc:
+            except Exception:
                 app.logger.exception("Plant disease prediction failed")
                 error = (
                     "Could not process this image. "
@@ -348,16 +313,17 @@ def disease():
         disease_name=disease_name,
         confidence=confidence,
         image_url=image_url,
-        error=error
+        error=error,
     )
+
 
 # ============================================================
 # ABOUT
 # ============================================================
 
+
 @app.route("/about")
 def about():
-
     return render_template("about.html")
 
 
@@ -365,58 +331,40 @@ def about():
 # ADMIN LOGIN
 # ============================================================
 
+
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
-
     error = None
 
     if request.method == "POST":
-
         username = request.form["username"]
         password = request.form["password"]
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-
             session["admin_logged_in"] = True
-
             return redirect(url_for("admin_history"))
-
         else:
-
             error = "Invalid username or password."
 
-    return render_template(
-        "admin_login.html",
-        error=error
-    )
+    return render_template("admin_login.html", error=error)
+
 
 # ============================================================
 # ADMIN HISTORY
 # ============================================================
 
+
 @app.route("/admin/history")
 def admin_history():
-
-    # Check whether admin is logged in
-
     if not session.get("admin_logged_in"):
-
         return redirect(url_for("admin_login"))
-
 
     connection = None
     cursor = None
 
     try:
-
-        # Connect to MySQL
-
         connection = get_db_connection()
-
         cursor = connection.cursor(dictionary=True)
-
-
-        # Get all prediction records
 
         cursor.execute("""
             SELECT
@@ -436,23 +384,17 @@ def admin_history():
 
         predictions = cursor.fetchall()
 
-
         return render_template(
             "admin_history.html",
-            predictions=predictions
+            predictions=predictions,
         )
 
-
     except mysql.connector.Error as e:
-
         return f"Database error: {e}"
 
-
     finally:
-
         if cursor:
             cursor.close()
-
         if connection:
             connection.close()
 
@@ -461,20 +403,16 @@ def admin_history():
 # ADMIN LOGOUT
 # ============================================================
 
+
 @app.route("/admin/logout")
 def admin_logout():
-
     session.pop("admin_logged_in", None)
-
     return redirect(url_for("admin_login"))
 
+
 # ============================================================
-# RUN APPLICATION
+# ENTRY POINT
 # ============================================================
 
 if __name__ == "__main__":
-
-    app.run(
-        debug=False,
-        use_reloader=False
-    )
+    app.run(debug=False, use_reloader=False)
