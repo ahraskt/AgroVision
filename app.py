@@ -1,3 +1,8 @@
+import os
+
+# Force TensorFlow to use CPU only — suppresses CUDA errors
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"   # suppresses warnings
 # ============================================================
 # app.py  –  Crop Recommendation + Plant Disease Detection
 # ============================================================
@@ -66,7 +71,14 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 crop_model = joblib.load(CROP_MODEL_PATH)
 
 # Plant disease model
-disease_model = tf.keras.models.load_model(DISEASE_MODEL_PATH)
+# ✅ Better — loads only when first needed
+_disease_model = None
+
+def get_disease_model():
+    global _disease_model
+    if _disease_model is None:
+        _disease_model = tf.keras.models.load_model(DISEASE_MODEL_PATH)
+    return _disease_model
 
 with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as _f:
     class_names = json.load(_f)
@@ -266,9 +278,8 @@ def disease():
                 image_array = np.expand_dims(image_array, axis=0)
 
                 # 6. Run inference
-                probabilities = disease_model.predict(
-                    image_array, verbose=0
-                )[0]
+                # ✅ new
+                probabilities = get_disease_model().predict(image_array, verbose=0)[0]
 
                 best_index = int(np.argmax(probabilities))
                 prediction = class_names[best_index]
@@ -413,6 +424,6 @@ def admin_logout():
 # ============================================================
 # ENTRY POINT
 # ============================================================
-
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)
