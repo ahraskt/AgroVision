@@ -5,6 +5,6 @@ numpy
 Pillow
 scikit-learn
 joblib
-tensorflow
+tensorflow-cpu
 mysql-connector-python
 pandas
