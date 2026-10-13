@@ -8,3 +8,5 @@ joblib
 tensorflow-cpu
 mysql-connector-python
 pandas
+werkzeug
+python-dotenv
