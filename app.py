@@ -104,15 +104,15 @@ def allowed_file(filename: str) -> bool:
 
 
 def get_db_connection():
-    """Create and return a MySQL connection from environment variables."""
-    return mysql.connector.connect(
-        host=os.environ["DB_HOST"],
-        port=int(os.environ.get("DB_PORT", "4000")),
-        user=os.environ["DB_USER"],
-        password=os.environ["DB_PASSWORD"],
-        database=os.environ.get("DB_NAME", "crop_project"),
-        ssl_ca=os.environ.get("DB_SSL_CA"),
+
+    connection = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="Ahras@2002",
+        database="crop_project"
     )
+
+    return connection
 
 
 # ============================================================
