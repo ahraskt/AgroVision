@@ -12,9 +12,12 @@ import json
 import os
 import uuid
 from pathlib import Path
+from leaf_filter import is_valid_leaf
 
+from disease_database import save_disease_prediction
 import joblib
 import mysql.connector
+from database import get_db_connection
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -30,7 +33,8 @@ from werkzeug.utils import secure_filename
 
 # ============================================================
 # PATHS  (all relative to this file – works on any machine)
-# ============================================================
+# ============================================================  
+
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -87,8 +91,8 @@ with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as _f:
 # ADMIN CREDENTIALS
 # ============================================================
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "admin123"
+ADMIN_USERNAME = "aa"
+ADMIN_PASSWORD = "a"
 
 # ============================================================
 # HELPERS
@@ -111,6 +115,7 @@ def get_db_connection():
         password="Ahras@2002",
         database="crop_project"
     )
+
 
     return connection
 
@@ -256,6 +261,12 @@ def disease():
             try:
                 # 1. Read raw bytes
                 image_bytes = uploaded_file.read()
+                is_leaf, detected_cat, clip_conf, user_msg = is_valid_leaf(image_bytes)
+                if not is_leaf:
+                    return render_template(
+                    "disease.html",
+                    error=user_msg
+                )
 
                 # 2. Decode into a PIL image
                 image = tf.keras.utils.load_img(
@@ -296,19 +307,35 @@ def disease():
                     plant_name = "Unknown"
                     disease_name = prediction
 
-                # 8. Save the uploaded image so it can be displayed
+            
+               
+                # 8. Generate a unique filename
                 safe_name = secure_filename(uploaded_file.filename)
+
                 if not safe_name:
                     safe_name = "leaf_image.jpg"
 
                 unique_name = f"{uuid.uuid4().hex}_{safe_name}"
+
+                # 9. Save image in the uploads folder
                 save_path = UPLOAD_FOLDER / unique_name
                 save_path.write_bytes(image_bytes)
 
+                # 10. Save prediction details and original image to MySQL
+                save_disease_prediction(
+                    image_name=unique_name,
+                    image_data=image_bytes,
+                    plant_name=plant_name,
+                    disease_name=disease_name,
+                    confidence=confidence
+                )
+
+                # 11. Prepare image URL for disease.html
                 image_url = url_for(
                     "static",
                     filename=f"uploads/{unique_name}",
-                )
+)
+
 
             except Exception:
                 app.logger.exception("Plant disease prediction failed")
@@ -348,16 +375,30 @@ def admin_login():
     error = None
 
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin_logged_in"] = True
-            return redirect(url_for("admin_history"))
-        else:
-            error = "Invalid username or password."
+            return redirect(url_for("admin_dashboard"))
+
+        error = "Invalid username or password."
 
     return render_template("admin_login.html", error=error)
+
+
+
+# ============================================================
+# ADMIN DASHBOARD
+# ============================================================
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+
+    return render_template("admin_dashboard.html")
+
 
 
 # ============================================================
@@ -408,6 +449,61 @@ def admin_history():
             cursor.close()
         if connection:
             connection.close()
+
+
+
+# ============================================================
+# ADMIN DISEASE HISTORY PAGE
+# ============================================================
+
+
+# ============================================================
+# ADMIN DISEASE HISTORY
+# ============================================================
+
+@app.route("/admin/disease-history")
+def disease_history():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT
+                id,
+                image_name,
+                plant_name,
+                disease_name,
+                confidence,
+                created_at
+            FROM disease_predictions
+            ORDER BY created_at DESC
+        """)
+
+        predictions = cursor.fetchall()
+
+        return render_template(
+            "disease_history.html",
+            predictions=predictions
+        )
+
+    except mysql.connector.Error:
+        app.logger.exception("Failed to load disease history")
+        return "Unable to load disease history. Check your database.", 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection and connection.is_connected():
+            connection.close()
+
+
 
 
 # ============================================================
