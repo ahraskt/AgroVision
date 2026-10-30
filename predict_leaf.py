@@ -111,3 +111,4 @@ for index in top_indices:
         f"{class_names[index].replace('___', ' - ')}: "
         f"{probabilities[index] * 100:.2f}%"
     )'''
+
