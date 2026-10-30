@@ -1,0 +1,913 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="about-page">
+
+    <div class="about-container">
+
+        <!-- Back Button -->
+        <button onclick="goBack()" class="back-button">
+            ← Back
+        </button>
+
+        <!-- Hero Section -->
+        <div class="about-hero">
+
+            <div class="hero-icon">🌿</div>
+
+            <span class="hero-tag">SMART AGRICULTURE • AI TECHNOLOGY</span>
+
+            <h1>About <span>AgroVision</span></h1>
+
+            <p class="hero-subtitle">
+                Crop Recommendation and Plant Disease Detection
+                System Using Machine Learning and CNN
+            </p>
+
+            <p class="hero-description">
+                Empowering smarter farming decisions through
+                machine learning, deep learning, and intelligent
+                agricultural predictions.
+            </p>
+
+            <div class="hero-highlights">
+                <span>🌱 Smart Crop Selection</span>
+                <span>🍃 Leaf Disease Detection</span>
+                <span>🧠 AI-Powered Predictions</span>
+            </div>
+
+        </div>
+
+        <!-- Project Overview -->
+        <div class="overview-card">
+
+            <div class="section-icon">🌾</div>
+
+            <div class="overview-content">
+                <h2>Project Overview</h2>
+
+                <p>
+                    Agriculture plays an important role in food
+                    production and economic development. Selecting
+                    suitable crops and identifying plant diseases
+                    early can help farmers make informed decisions.
+                </p>
+
+                <p>
+                    <strong>AgroVision</strong> is a web-based
+                    agricultural support system that combines
+                    Machine Learning and Deep Learning to provide
+                    crop recommendations and plant disease
+                    classification through a simple interface.
+                </p>
+
+                <p>
+                    Users can enter soil and environmental values,
+                    upload leaf images, and view prediction results.
+                    Prediction history can also be stored in MySQL
+                    for administrative review.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Main Features -->
+        <div class="section-heading">
+            <span>WHAT AGROVISION OFFERS</span>
+            <h2>Our Core Features</h2>
+            <p>Two intelligent modules designed to support agriculture.</p>
+        </div>
+
+        <div class="feature-grid">
+
+            <!-- Crop Recommendation -->
+            <div class="feature-card crop-card">
+
+                <div class="feature-icon">🌱</div>
+
+                <h3>Crop Recommendation</h3>
+
+                <p>
+                    Discover a suitable crop based on the
+                    agricultural parameters entered by the user.
+                </p>
+
+                <ul>
+                    <li>Nitrogen (N)</li>
+                    <li>Phosphorus (P)</li>
+                    <li>Potassium (K)</li>
+                    <li>Soil pH and rainfall</li>
+                    <li>Temperature, where supported</li>
+                </ul>
+
+                <div class="model-tag">
+                    🌳 Random Forest Classifier
+                </div>
+
+            </div>
+
+            <!-- Disease Detection -->
+            <div class="feature-card disease-card">
+
+                <div class="feature-icon">🍃</div>
+
+                <h3>Plant Disease Detection</h3>
+
+                <p>
+                    Analyze an uploaded leaf image to classify
+                    the plant and identify a possible disease.
+                </p>
+
+                <ul>
+                    <li>Leaf image upload</li>
+                    <li>Image preprocessing</li>
+                    <li>Plant and disease classification</li>
+                    <li>Prediction confidence display</li>
+                    <li>Prediction history storage</li>
+                </ul>
+
+                <div class="model-tag">
+                    🧠 CNN • MobileNetV2
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Machine Learning Section -->
+        <div class="ml-section">
+
+            <div class="ml-icon">🧠</div>
+
+            <div>
+                <h2>Intelligence Behind AgroVision</h2>
+
+                <p>
+                    The crop recommendation module uses a trained
+                    Random Forest classifier to learn patterns
+                    from agricultural data. The plant disease
+                    module uses a trained MobileNetV2 deep learning
+                    model to classify leaf images.
+                </p>
+
+                <p>
+                    Each model processes its respective input and
+                    returns a prediction based on patterns learned
+                    during training. The quality of predictions
+                    depends on the training data and model performance.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Workflow -->
+        <div class="section-heading">
+            <span>HOW IT WORKS</span>
+            <h2>Simple Three-Step Workflow</h2>
+            <p>From user input to an AI-generated prediction.</p>
+        </div>
+
+        <div class="workflow-grid">
+
+            <div class="workflow-card">
+                <div class="step-number">01</div>
+                <div class="workflow-icon">📝</div>
+                <h3>Provide Input</h3>
+                <p>
+                    Enter soil and environmental values, or upload
+                    a photograph of a plant leaf.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="step-number">02</div>
+                <div class="workflow-icon">⚙️</div>
+                <h3>AI Processing</h3>
+                <p>
+                    The trained Random Forest or MobileNetV2 model
+                    analyzes the supplied information.
+                </p>
+            </div>
+
+            <div class="workflow-card">
+                <div class="step-number">03</div>
+                <div class="workflow-icon">📊</div>
+                <h3>View Results</h3>
+                <p>
+                    View the predicted crop or disease class and
+                    the available model confidence information.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Technologies -->
+        <div class="technology-section">
+
+            <div class="section-heading">
+                <span>DEVELOPMENT STACK</span>
+                <h2>Technologies Used</h2>
+                <p>Tools and frameworks used to build AgroVision.</p>
+            </div>
+
+            <div class="technology-grid">
+
+                <div class="technology-item">
+                    <span>🐍</span>
+                    <strong>Python</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🌐</span>
+                    <strong>Flask</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🌳</span>
+                    <strong>Scikit-learn</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🤖</span>
+                    <strong>TensorFlow</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🧠</span>
+                    <strong>Keras</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🖼️</span>
+                    <strong>MobileNetV2</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🔢</span>
+                    <strong>NumPy</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🗄️</span>
+                    <strong>MySQL</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🎨</span>
+                    <strong>HTML5 &amp; CSS3</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>⚡</span>
+                    <strong>JavaScript</strong>
+                </div>
+
+                <div class="technology-item">
+                    <span>🖼️</span>
+                    <strong>Pillow</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Objectives -->
+        <div class="objectives-card">
+
+            <div class="objectives-icon">🎯</div>
+
+            <h2>Project Objectives</h2>
+
+            <div class="objectives-grid">
+
+                <div>
+                    <span>✓</span>
+                    <p>Recommend suitable crops using agricultural inputs.</p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>Classify plant leaf images and possible diseases.</p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>Present prediction results through a user-friendly website.</p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>Support administrative review of stored prediction records.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Conclusion -->
+        <div class="conclusion-section">
+
+            <div class="conclusion-icon">🌍</div>
+
+            <h2>Technology for Smarter Agriculture</h2>
+
+            <p>
+                AgroVision demonstrates how Machine Learning,
+                Deep Learning, and web technologies can be
+                combined to develop an agricultural support system.
+                It aims to make crop recommendations and plant
+                disease predictions more accessible to users.
+            </p>
+
+            <p class="disclaimer">
+                <strong>Note:</strong> Predictions are intended
+                as decision-support information. Actual crop
+                suitability and plant health should also be
+                assessed using local agricultural knowledge
+                and expert advice.
+            </p>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="about-footer">
+            <span>🌿</span>
+            <p>AgroVision — Growing Smarter with Technology</p>
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+/* Main Page */
+.about-page {
+    background: #f3f8f4;
+    min-height: 100vh;
+    padding: 30px 20px 45px;
+    color: #33443a;
+}
+
+.about-container {
+    max-width: 1150px;
+    margin: auto;
+}
+
+/* Back Button */
+.back-button {
+    border: none;
+    padding: 10px 18px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #198754;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.back-button:hover {
+    background: #126b40;
+    transform: translateX(-3px);
+}
+
+/* Hero */
+.about-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 55px 30px;
+    text-align: center;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #104c32, #198754, #53a96f);
+    color: white;
+    box-shadow: 0 12px 30px rgba(23, 107, 69, 0.18);
+}
+
+.hero-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 30px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.about-hero h1 {
+    margin: 20px 0 12px;
+    font-size: 43px;
+    color: #ffffff;
+}
+
+.about-hero h1 span {
+    color: #c9f5b5;
+}
+
+.hero-subtitle {
+    max-width: 750px;
+    margin: 0 auto 14px;
+    font-size: 19px;
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+.hero-description {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #e5f4e9;
+}
+
+.hero-highlights {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.hero-highlights span {
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 30px;
+    font-size: 13px;
+}
+
+/* Overview */
+.overview-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    margin-top: 28px;
+    padding: 30px;
+    background: white;
+    border: 1px solid #e0ece2;
+    border-radius: 17px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+}
+
+.section-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    background: #e5f4e8;
+    font-size: 34px;
+}
+
+.overview-content h2 {
+    color: #176b45;
+    font-size: 25px;
+    margin: 0 0 15px;
+}
+
+.overview-content p {
+    color: #5d6b61;
+    font-size: 15px;
+    line-height: 1.85;
+    margin: 0 0 12px;
+}
+
+.overview-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Section Headings */
+.section-heading {
+    text-align: center;
+    margin: 48px 0 25px;
+}
+
+.section-heading > span {
+    color: #198754;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    color: #176b45;
+    font-size: 29px;
+    margin: 9px 0;
+}
+
+.section-heading p {
+    color: #718076;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* Feature Cards */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.feature-card {
+    padding: 28px;
+    background: white;
+    border: 1px solid #e0ece2;
+    border-radius: 17px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+}
+
+.feature-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background: #e5f4e8;
+    border-radius: 15px;
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+
+.feature-card h3 {
+    color: #176b45;
+    font-size: 22px;
+    margin: 0 0 12px;
+}
+
+.feature-card p {
+    color: #657268;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.feature-card ul {
+    padding-left: 20px;
+    margin: 18px 0;
+}
+
+.feature-card li {
+    color: #536258;
+    font-size: 14px;
+    line-height: 2;
+}
+
+.feature-card li::marker {
+    color: #198754;
+}
+
+.model-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #eaf5ed;
+    color: #176b45;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Machine Learning Section */
+.ml-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    margin-top: 28px;
+    padding: 30px;
+    background: #e8f4eb;
+    border: 1px solid #d3e8d8;
+    border-radius: 17px;
+}
+
+.ml-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    background: white;
+    font-size: 33px;
+}
+
+.ml-section h2 {
+    color: #176b45;
+    font-size: 23px;
+    margin: 3px 0 12px;
+}
+
+.ml-section p {
+    color: #53675a;
+    font-size: 14px;
+    line-height: 1.85;
+}
+
+/* Workflow */
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.workflow-card {
+    position: relative;
+    padding: 30px 22px;
+    text-align: center;
+    background: white;
+    border: 1px solid #e0ece2;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+}
+
+.step-number {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    color: #c9e5d0;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.workflow-icon {
+    font-size: 38px;
+    margin: 12px 0 15px;
+}
+
+.workflow-card h3 {
+    color: #176b45;
+    font-size: 19px;
+}
+
+.workflow-card p {
+    color: #68766d;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Technology Grid */
+.technology-section {
+    margin-top: 15px;
+}
+
+.technology-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.technology-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 17px 14px;
+    background: white;
+    border: 1px solid #e0ece2;
+    border-radius: 12px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.technology-item:hover {
+    background: #edf7ef;
+    border-color: #b6d9bf;
+}
+
+.technology-item span {
+    font-size: 25px;
+}
+
+.technology-item strong {
+    color: #385744;
+    font-size: 13px;
+}
+
+/* Objectives */
+.objectives-card {
+    margin-top: 40px;
+    padding: 32px;
+    background: white;
+    border: 1px solid #e0ece2;
+    border-radius: 17px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+}
+
+.objectives-icon {
+    font-size: 38px;
+    text-align: center;
+}
+
+.objectives-card h2 {
+    color: #176b45;
+    font-size: 26px;
+    text-align: center;
+    margin: 12px 0 25px;
+}
+
+.objectives-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.objectives-grid > div {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #f5faf6;
+    border-radius: 10px;
+}
+
+.objectives-grid span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    background: #198754;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.objectives-grid p {
+    color: #536258;
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Conclusion */
+.conclusion-section {
+    margin-top: 30px;
+    padding: 40px 30px;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #104c32, #198754);
+    border-radius: 18px;
+}
+
+.conclusion-icon {
+    font-size: 42px;
+}
+
+.conclusion-section h2 {
+    color: white;
+    font-size: 26px;
+    margin: 15px 0;
+}
+
+.conclusion-section > p {
+    max-width: 800px;
+    margin: 0 auto 15px;
+    color: #e5f4e9;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.conclusion-section .disclaimer {
+    margin-top: 22px;
+    padding: 15px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+/* Footer */
+.about-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 25px 10px 0;
+    color: #65816d;
+    text-align: center;
+}
+
+.about-footer span {
+    font-size: 23px;
+}
+
+.about-footer p {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    .technology-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .workflow-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-page {
+        padding: 20px 12px 30px;
+    }
+
+    .about-hero {
+        padding: 38px 18px;
+        border-radius: 16px;
+    }
+
+    .about-hero h1 {
+        font-size: 32px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+    }
+
+    .hero-description {
+        font-size: 14px;
+    }
+
+    .hero-highlights {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .overview-card,
+    .ml-section {
+        flex-direction: column;
+        padding: 22px;
+    }
+
+    .overview-content h2,
+    .ml-section h2 {
+        font-size: 22px;
+    }
+
+    .section-heading {
+        margin: 35px 0 20px;
+    }
+
+    .section-heading h2 {
+        font-size: 25px;
+    }
+
+    .feature-grid,
+    .objectives-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card {
+        padding: 23px;
+    }
+
+    .technology-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .technology-item {
+        padding: 13px 10px;
+        gap: 8px;
+    }
+
+    .technology-item span {
+        font-size: 21px;
+    }
+
+    .technology-item strong {
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .objectives-card {
+        padding: 23px 17px;
+    }
+
+    .conclusion-section {
+        padding: 30px 18px;
+    }
+
+    .conclusion-section h2 {
+        font-size: 23px;
+    }
+}
+
+</style>
+
+{% endblock %}

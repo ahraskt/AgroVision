@@ -1,0 +1,395 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="history-page">
+
+    <div class="history-container">
+
+        <!-- Logout Button: Top Right -->
+        <a href="{{ url_for('admin_logout') }}"
+           class="logout-button">
+            🚪 Logout
+        </a>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-icon">📊</div>
+
+            <h1>Admin Prediction History</h1>
+
+            <p class="subtitle">
+                View and review all crop recommendation predictions
+                recorded in the AgroVision database.
+            </p>
+        </div>
+
+        <!-- Total Records Summary -->
+        <div class="record-summary">
+            <div class="summary-icon">📈</div>
+
+            <div class="summary-content">
+                <h3>Total Predictions</h3>
+                <strong>{{ predictions|length }}</strong>
+            </div>
+        </div>
+
+        <!-- Prediction History Table -->
+        <div class="table-wrapper">
+
+            {% if predictions %}
+
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date &amp; Time</th>
+                        <th>Nitrogen</th>
+                        <th>Phosphorus</th>
+                        <th>Potassium</th>
+                        <th>pH</th>
+                        <th>Rainfall</th>
+                        <th>Temperature</th>
+                        <th>Recommended Crop</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for prediction in predictions %}
+                    <tr>
+                        <td class="id-cell">
+                            {{ prediction.id }}
+                        </td>
+
+                        <td class="date-cell">
+                            {{ prediction.created_at }}
+                        </td>
+
+                        <td>{{ prediction.nitrogen }}</td>
+                        <td>{{ prediction.phosphorus }}</td>
+                        <td>{{ prediction.potassium }}</td>
+                        <td>{{ prediction.ph }}</td>
+                        <td>{{ prediction.rainfall }}</td>
+                        <td>{{ prediction.temperature }}</td>
+
+                        <td>
+                            <span class="crop-label">
+                                🌱 {{ prediction.predicted_crop }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% if prediction.confidence is not none %}
+                                <span class="confidence-label">
+                                    {{ prediction.confidence }}%
+                                </span>
+                            {% else %}
+                                <span class="na-label">N/A</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+
+                <h2>No Prediction History</h2>
+
+                <p>
+                    No crop recommendations have been stored
+                    in the database yet.
+                </p>
+
+                <a href="{{ url_for('crop') }}"
+                   class="detect-button">
+                    🌱 Make a Crop Prediction
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+/* Main Page */
+.history-page {
+    min-height: 70vh;
+    padding: 40px 20px;
+    background: #f3f8f4;
+}
+
+/* Main Container */
+.history-container {
+    position: relative;
+    max-width: 1350px;
+    margin: auto;
+    padding: 75px 30px 35px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
+}
+
+/* Logout Button */
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    display: inline-block;
+    padding: 10px 17px;
+    background: #fce8e8;
+    color: #c62828;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.25s;
+}
+
+.logout-button:hover {
+    background: #c62828;
+    color: #ffffff;
+}
+
+/* Page Header */
+.page-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.header-icon {
+    font-size: 45px;
+    margin-bottom: 8px;
+}
+
+.page-header h1 {
+    color: #176b45;
+    font-size: 30px;
+    margin: 0 0 12px;
+}
+
+.subtitle {
+    color: #66736a;
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0 auto 20px;
+}
+
+/* Total Records Summary */
+.record-summary {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 280px;
+    margin: 0 0 25px;
+    padding: 18px 22px;
+    background: #f0f8f2;
+    border: 1px solid #d9e9dc;
+    border-radius: 12px;
+}
+
+.summary-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    background: #dcefe1;
+    border-radius: 12px;
+    font-size: 27px;
+}
+
+.summary-content h3 {
+    margin: 0 0 5px;
+    color: #526358;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.summary-content strong {
+    color: #176b45;
+    font-size: 28px;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e0e9e2;
+    border-radius: 12px;
+}
+
+/* Table */
+.history-table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+}
+
+/* Table Header */
+.history-table thead th {
+    padding: 17px 14px;
+    background: #176b45;
+    color: #ffffff;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Table Cells */
+.history-table tbody td {
+    padding: 16px 14px;
+    text-align: center;
+    border-bottom: 1px solid #e7eee8;
+    color: #39483e;
+    font-size: 14px;
+}
+
+/* Alternating Row Colours */
+.history-table tbody tr:nth-child(even) {
+    background: #f8fbf8;
+}
+
+/* Row Hover */
+.history-table tbody tr:hover {
+    background: #edf7ef;
+}
+
+.history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ID */
+.id-cell {
+    color: #176b45 !important;
+    font-weight: bold;
+}
+
+/* Date and Time */
+.date-cell {
+    white-space: nowrap;
+    color: #657168 !important;
+}
+
+/* Crop Label */
+.crop-label {
+    display: inline-block;
+    padding: 7px 11px;
+    background: #eaf5ed;
+    color: #176b45;
+    border-radius: 7px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Confidence Label */
+.confidence-label {
+    display: inline-block;
+    padding: 7px 10px;
+    background: #e8f2fc;
+    color: #205e99;
+    border-radius: 7px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* Missing Confidence */
+.na-label {
+    color: #777777;
+}
+
+/* Empty State */
+.empty-state {
+    margin-top: 10px;
+    padding: 45px 20px;
+    text-align: center;
+    background: #f5faf6;
+    border: 1px dashed #b9d8c1;
+    border-radius: 12px;
+}
+
+.empty-icon {
+    font-size: 45px;
+    margin-bottom: 12px;
+}
+
+.empty-state h2 {
+    color: #176b45;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #66736a;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+/* Make Prediction Button */
+.detect-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #198754;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.25s;
+}
+
+.detect-button:hover {
+    background: #126b40;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .history-page {
+        padding: 20px 10px;
+    }
+
+    .history-container {
+        padding: 85px 14px 22px;
+        border-radius: 12px;
+    }
+
+    .logout-button {
+        top: 15px;
+        right: 15px;
+    }
+
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .header-icon {
+        font-size: 38px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .record-summary {
+        max-width: none;
+        padding: 15px;
+    }
+
+    .empty-state {
+        padding: 30px 12px;
+    }
+}
+</style>
+
+{% endblock %}
+```

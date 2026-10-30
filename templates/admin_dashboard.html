@@ -1,0 +1,442 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="admin-dashboard-card">
+
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="brand-icon">🌱</div>
+
+            <div class="header-text">
+                <span class="small-heading">AGROVISION MANAGEMENT</span>
+                <h1>Admin Dashboard</h1>
+                <p>Monitor and manage your prediction records.</p>
+            </div>
+
+            <a href="{{ url_for('admin_logout') }}"
+               class="logout-button">
+                <span>↪</span> Logout
+            </a>
+        </div>
+
+        <div class="header-divider"></div>
+
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>Welcome, Administrator! 👋</h2>
+
+            <p>
+                Manage crop recommendations and plant disease detection
+                records from one place. Select a section below to view
+                the prediction history stored in your database.
+            </p>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-actions">
+
+            <!-- Crop History -->
+            <a href="{{ url_for('admin_history') }}"
+               class="history-card crop-card">
+
+                <div class="card-top">
+                    <div class="history-icon">📊</div>
+                    <span class="arrow-icon">↗</span>
+                </div>
+
+                <div class="card-content">
+                    <span class="card-label">CROP MANAGEMENT</span>
+                    <h3>Crop Prediction History</h3>
+                    <p>
+                        Review soil parameters, predicted crops,
+                        confidence scores and saved prediction records.
+                    </p>
+                </div>
+
+                <div class="card-footer">
+                    <span>View crop records</span>
+                    <span class="footer-arrow">→</span>
+                </div>
+
+            </a>
+
+            <!-- Disease History -->
+            <a href="{{ url_for('disease_history') }}"
+               class="history-card disease-card">
+
+                <div class="card-top">
+                    <div class="history-icon">🌿</div>
+                    <span class="arrow-icon">↗</span>
+                </div>
+
+                <div class="card-content">
+                    <span class="card-label">PLANT HEALTH</span>
+                    <h3>Disease Prediction History</h3>
+                    <p>
+                        Inspect uploaded leaf images, detected plant
+                        diseases and model confidence scores.
+                    </p>
+                </div>
+
+                <div class="card-footer">
+                    <span>View disease records</span>
+                    <span class="footer-arrow">→</span>
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- Footer Information -->
+        <div class="dashboard-footer">
+            <span class="status-dot"></span>
+            AgroVision Admin Panel
+            <span class="footer-separator">•</span>
+            Crop Intelligence & Plant Health
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+/* Main Page */
+.admin-page {
+    min-height: 75vh;
+    padding: 45px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at top left, #e1f5e9 0, transparent 35%),
+        radial-gradient(circle at bottom right, #d9f0e2 0, transparent 35%);
+}
+
+/* Main Dashboard */
+.admin-dashboard-card {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    padding: 35px;
+    background: #ffffff;
+    border: 1px solid #e3eee6;
+    border-radius: 24px;
+    box-shadow: 0 15px 45px rgba(24, 83, 51, 0.10);
+}
+
+/* Header */
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-right: 105px;
+}
+
+.brand-icon {
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #176b45, #39a96b);
+    border-radius: 18px;
+    font-size: 32px;
+    box-shadow: 0 7px 16px rgba(23, 107, 69, 0.18);
+}
+
+.header-text {
+    text-align: left;
+}
+
+.small-heading {
+    color: #27945b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.header-text h1 {
+    margin: 5px 0;
+    color: #173e2b;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.header-text p {
+    margin: 0;
+    color: #77847b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Logout */
+.logout-button {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    color: #b83232;
+    background: #fff0f0;
+    border: 1px solid #ffdddd;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.logout-button:hover {
+    color: #ffffff;
+    background: #c93636;
+    border-color: #c93636;
+    transform: translateY(-2px);
+}
+
+/* Divider */
+.header-divider {
+    height: 1px;
+    margin: 27px 0;
+    background: #eaf0eb;
+}
+
+/* Welcome */
+.welcome-section {
+    margin-bottom: 27px;
+    text-align: left;
+}
+
+.welcome-section h2 {
+    margin: 0 0 10px;
+    color: #234b35;
+    font-size: 22px;
+    font-weight: 750;
+}
+
+.welcome-section p {
+    max-width: 720px;
+    margin: 0;
+    color: #748078;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+/* History Cards */
+.dashboard-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.history-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 255px;
+    padding: 25px;
+    color: inherit;
+    background: #ffffff;
+    border: 1px solid #e2ece5;
+    border-radius: 18px;
+    text-decoration: none;
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+}
+
+.history-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(26, 91, 54, 0.12);
+    border-color: #82c69c;
+}
+
+/* Card Icon Row */
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 23px;
+}
+
+.history-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    font-size: 28px;
+}
+
+.crop-card .history-icon {
+    background: #e4f5e9;
+}
+
+.disease-card .history-icon {
+    background: #e0f4ed;
+}
+
+.arrow-icon {
+    color: #7a9a84;
+    font-size: 23px;
+    transition: transform 0.25s ease;
+}
+
+.history-card:hover .arrow-icon {
+    transform: translate(3px, -3px);
+}
+
+/* Card Text */
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    color: #31915b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.card-content h3 {
+    margin: 9px 0 10px;
+    color: #234b35;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.card-content p {
+    margin: 0;
+    color: #78847c;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* Card Footer */
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 22px;
+    padding-top: 15px;
+    color: #237748;
+    border-top: 1px solid #eaf1ec;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.footer-arrow {
+    font-size: 20px;
+    transition: transform 0.2s ease;
+}
+
+.history-card:hover .footer-arrow {
+    transform: translateX(5px);
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eaf0eb;
+    color: #89958d;
+    font-size: 12px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    background: #36ad69;
+    border-radius: 50%;
+}
+
+.footer-separator {
+    color: #c3ccc5;
+}
+
+/* Tablet and Mobile */
+@media (max-width: 650px) {
+    .admin-page {
+        padding: 25px 12px;
+    }
+
+    .admin-dashboard-card {
+        padding: 25px 18px;
+        border-radius: 18px;
+    }
+
+    .dashboard-header {
+        align-items: flex-start;
+        gap: 12px;
+        padding-right: 0;
+        padding-top: 48px;
+    }
+
+    .brand-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 25px;
+        border-radius: 13px;
+    }
+
+    .header-text h1 {
+        font-size: 24px;
+    }
+
+    .header-text p {
+        font-size: 12px;
+    }
+
+    .small-heading {
+        font-size: 9px;
+        letter-spacing: 1.3px;
+    }
+
+    .logout-button {
+        top: 16px;
+        right: 18px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .welcome-section h2 {
+        font-size: 19px;
+    }
+
+    .dashboard-actions {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .history-card {
+        min-height: 235px;
+        padding: 21px;
+    }
+
+    .card-content h3 {
+        font-size: 19px;
+    }
+
+    .dashboard-footer {
+        font-size: 11px;
+        line-height: 1.8;
+    }
+}
+
+</style>
+
+{% endblock %}
+```

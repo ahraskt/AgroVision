@@ -1,0 +1,81 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <!-- Back button aligned to the left -->
+    <div style="width: 100%; text-align: left; margin-bottom: 20px;">
+        <button onclick="goBack()" class="back-button">
+            ← Back
+        </button>
+    </div>
+
+    <div class="admin-login-card">
+
+        <div class="admin-icon">
+            🔐
+        </div>
+
+        <h1>
+            Admin Login
+        </h1>
+
+        <p>
+            Login to access crop prediction history.
+        </p>
+
+        {% if error %}
+
+        <div class="admin-error">
+            ⚠️ {{ error }}
+        </div>
+
+        {% endif %}
+
+        <form method="POST">
+
+            <div class="admin-input">
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter admin username"
+                    required>
+
+            </div>
+
+            <div class="admin-input">
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter admin password"
+                    required>
+
+            </div>
+
+            <button
+                type="submit"
+                class="admin-login-button">
+
+                🔓 Login
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}
