@@ -356,6 +356,76 @@ def disease():
 
 
 # ============================================================
+# DISEASE REMEDIES
+# ============================================================
+
+@app.route("/remedies")
+def remedies():
+
+    # Get plant and disease names from the URL
+    crop_name = request.args.get("crop_name")
+    disease_name = request.args.get("disease_name")
+
+    if not crop_name or not disease_name:
+        return "Plant name or disease name is missing.", 400
+
+    connection = None
+    cursor = None
+
+    try:
+        # Connect to MySQL
+        connection = get_db_connection()
+
+        cursor = connection.cursor(dictionary=True)
+
+        # Fetch remedies for the detected crop and disease
+        sql = """
+            SELECT
+                crop_name,
+                disease_name,
+                pathogen,
+                organic_remedies,
+                chemical_treatments,
+                prevention_methods
+            FROM disease_remedies
+            WHERE LOWER(TRIM(crop_name)) = LOWER(TRIM(%s))
+            AND LOWER(REPLACE(TRIM(disease_name), '_', ' ')) =
+                LOWER(REPLACE(TRIM(%s), '_', ' '))
+            LIMIT 1
+        """
+
+        cursor.execute(sql, (crop_name, disease_name))
+
+        remedy = cursor.fetchone()
+
+        if remedy is None:
+            return render_template(
+                "remedies.html",
+                remedy=None,
+                error="Remedies not found for this disease."
+            )
+
+        # Open the remedies page
+        return render_template(
+            "remedies.html",
+            remedy=remedy,
+            error=None
+        )
+
+    except mysql.connector.Error:
+        app.logger.exception("Failed to fetch disease remedies")
+
+        return "Unable to load remedies. Please check your database.", 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection and connection.is_connected():
+            connection.close()
+
+
+# ============================================================
 # ABOUT
 # ============================================================
 
