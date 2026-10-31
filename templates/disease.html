@@ -1,4 +1,3 @@
-```html
 {% extends "base.html" %}
 
 {% block content %}
@@ -454,6 +453,41 @@
     background: linear-gradient(90deg, #4ade80, #15803d);
     border-radius: 20px;
     transition: width 1.1s ease;
+}
+
+/* REMEDIES BUTTON */
+
+.remedies-button {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 13px;
+    background: linear-gradient(120deg, #d97706, #f59e0b);
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 9px 22px rgba(217, 119, 6, 0.16);
+    transition: all 0.25s ease;
+}
+
+.remedies-button:hover {
+    background: linear-gradient(120deg, #b45309, #d97706);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 13px 28px rgba(180, 83, 9, 0.22);
+}
+
+.remedies-button:focus-visible {
+    outline: 3px solid #fcd34d;
+    outline-offset: 4px;
 }
 
 /* RESULT NOTE */
@@ -937,6 +971,16 @@
                 </div>
 
             </div>
+
+
+            <!-- REMEDIES BUTTON: SHOW ONLY WHEN A DISEASE IS DETECTED -->
+
+            {% if disease_name and disease_name | lower not in ['healthy', 'healthy leaf'] %}
+            <a href="{{ url_for('remedies', crop_name=plant_name, disease_name=disease_name) }}"
+               class="remedies-button">
+                🌿 View Remedies
+            </a>
+            {% endif %}
 
 
             <!-- RESULT DISCLAIMER -->
