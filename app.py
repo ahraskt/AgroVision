@@ -35,7 +35,6 @@ from werkzeug.utils import secure_filename
 # PATHS  (all relative to this file – works on any machine)
 # ============================================================  
 
-
 BASE_DIR = Path(__file__).resolve().parent
 
 CROP_MODEL_PATH = BASE_DIR / "crop_recommendation_model.pkl"
@@ -44,9 +43,7 @@ DISEASE_MODEL_PATH = (
     BASE_DIR / "plant_disease_model" / "best_model.keras"
 )
 
-CLASS_NAMES_PATH = (
-    BASE_DIR / "plant_disease_model" / "class_names.json"
-)
+CLASS_NAMES_PATH = BASE_DIR / "class_names.json"
 
 # ============================================================
 # FLASK APP
@@ -74,24 +71,44 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 # Crop recommendation model
 crop_model = joblib.load(CROP_MODEL_PATH)
 
-# Plant disease model
-# ✅ Better — loads only when first needed
+# ==========================================
+# LOAD NEW TRAINED CNN MODEL
+# ==========================================
+
 _disease_model = None
 
 def get_disease_model():
+
     global _disease_model
+
     if _disease_model is None:
-        _disease_model = tf.keras.models.load_model(DISEASE_MODEL_PATH)
+
+        _disease_model = tf.keras.models.load_model(
+            DISEASE_MODEL_PATH,
+            compile=False
+        )
+
+        print("New CNN disease model loaded successfully!")
+
+        print("Input shape:", _disease_model.input_shape)
+        print("Output shape:", _disease_model.output_shape)
+
     return _disease_model
 
-with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as _f:
-    class_names = json.load(_f)
+# ============================================================
+# LOAD DISEASE CLASS NAMES FROM JSON
+# ============================================================
+
+with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as f:
+    class_names = json.load(f)
+
+print("Disease classes loaded:", len(class_names))
 
 # ============================================================
 # ADMIN CREDENTIALS
 # ============================================================
 
-ADMIN_USERNAME = "aa"
+ADMIN_USERNAME = "a"
 ADMIN_PASSWORD = "a"
 
 # ============================================================
@@ -259,7 +276,7 @@ def disease():
 
         else:
             try:
-                # 1. Read raw bytes
+                # 0. Read raw bytes
                 image_bytes = uploaded_file.read()
                 is_leaf, detected_cat, clip_conf, user_msg = is_valid_leaf(image_bytes)
                 if not is_leaf:
@@ -268,37 +285,52 @@ def disease():
                     error=user_msg
                 )
 
-                # 2. Decode into a PIL image
+                
+                # ==========================================
+                # NEW CNN MODEL IMAGE PROCESSING
+                # ==========================================
+
+                # 1. Load uploaded image and resize
                 image = tf.keras.utils.load_img(
                     io.BytesIO(image_bytes),
                     target_size=(224, 224),
-                    color_mode="rgb",
+                    color_mode="rgb"
                 )
 
-                # 3. Convert to NumPy array
+                # 2. Convert image into NumPy array
                 image_array = tf.keras.utils.img_to_array(image)
 
-                # 4. Apply MobileNetV2 preprocessing
-                image_array = (
-                    tf.keras.applications.mobilenet_v2.preprocess_input(
-                        image_array
-                    )
-                )
+                # 3. Ensure float32 format
+                image_array = image_array.astype(np.float32)
 
-                # 5. Add batch dimension
+                # IMPORTANT:
+                # Do NOT use mobilenet_v2.preprocess_input()
+                # The new model already contains normalization layers.
+
+                # 4. Add batch dimension
                 image_array = np.expand_dims(image_array, axis=0)
 
-                # 6. Run inference
-                # ✅ new
-                probabilities = get_disease_model().predict(image_array, verbose=0)[0]
+                # 5. Load new trained CNN model
+                model = get_disease_model()
 
+                # 6. Perform prediction
+                probabilities = model.predict(
+                    image_array,
+                    verbose=0
+                )[0]
+
+                # 7. Get highest probability class
                 best_index = int(np.argmax(probabilities))
+
                 prediction = class_names[best_index]
+
                 confidence = round(
-                    float(probabilities[best_index]) * 100, 2
+                    float(probabilities[best_index]) * 100,
+                    2
                 )
 
-                # 7. Split class name into plant / disease
+
+                # 8. Split class name into plant / disease
                 if "___" in prediction:
                     plant_name, disease_name = prediction.split(
                         "___", 1
@@ -309,7 +341,7 @@ def disease():
 
             
                
-                # 8. Generate a unique filename
+                # 9. Generate a unique filename
                 safe_name = secure_filename(uploaded_file.filename)
 
                 if not safe_name:
@@ -317,11 +349,11 @@ def disease():
 
                 unique_name = f"{uuid.uuid4().hex}_{safe_name}"
 
-                # 9. Save image in the uploads folder
+                # 10. Save image in the uploads folder
                 save_path = UPLOAD_FOLDER / unique_name
                 save_path.write_bytes(image_bytes)
 
-                # 10. Save prediction details and original image to MySQL
+                # 11. Save prediction details and original image to MySQL
                 save_disease_prediction(
                     image_name=unique_name,
                     image_data=image_bytes,
@@ -330,7 +362,7 @@ def disease():
                     confidence=confidence
                 )
 
-                # 11. Prepare image URL for disease.html
+                # 12. Prepare image URL for disease.html
                 image_url = url_for(
                     "static",
                     filename=f"uploads/{unique_name}",
