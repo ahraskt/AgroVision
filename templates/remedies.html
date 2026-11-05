@@ -1,0 +1,389 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+/* =========================================
+   REMEDIES PAGE - AGROVISION
+========================================= */
+
+.remedies-page {
+    min-height: 100vh;
+    padding: 35px 6% 80px;
+    background: linear-gradient(180deg, #f3faf3, #ffffff);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.remedies-container {
+    max-width: 1050px;
+    margin: auto;
+}
+
+/* Back button */
+
+.remedies-back {
+    margin-bottom: 30px;
+}
+
+.remedies-back button {
+    padding: 11px 20px;
+    border: 1px solid #d6e9d9;
+    border-radius: 12px;
+    background: white;
+    color: #176b3a;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.remedies-back button:hover {
+    background: #176b3a;
+    color: white;
+    transform: translateX(-3px);
+}
+
+/* Heading */
+
+.remedies-heading {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.remedies-icon {
+    width: 85px;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    background: #dcfce7;
+    border-radius: 24px;
+    font-size: 43px;
+}
+
+.remedies-heading h1 {
+    margin: 0;
+    color: #103e2d;
+    font-size: clamp(30px, 4vw, 42px);
+    font-weight: 850;
+}
+
+.remedies-heading p {
+    margin-top: 12px;
+    color: #718176;
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+/* Disease information */
+
+.disease-info {
+    padding: 28px;
+    margin-bottom: 28px;
+    background: white;
+    border: 1px solid #dceede;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(11, 61, 46, 0.06);
+}
+
+.disease-info h2 {
+    margin: 0 0 20px;
+    color: #176b3a;
+    font-size: 25px;
+}
+
+.info-item {
+    margin-top: 14px;
+    padding: 16px 18px;
+    background: #f5faf5;
+    border-radius: 11px;
+}
+
+.info-item span {
+    display: block;
+    margin-bottom: 7px;
+    color: #718176;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.info-item strong {
+    color: #17472e;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* Remedy cards */
+
+.remedy-card {
+    margin-top: 25px;
+    padding: 30px;
+    background: white;
+    border: 1px solid #e0ece1;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(11, 61, 46, 0.07);
+    transition: 0.25s;
+}
+
+.remedy-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 17px 40px rgba(11, 61, 46, 0.11);
+}
+
+.remedy-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 0 0 22px;
+    color: #174b30;
+    font-size: 24px;
+}
+
+.remedy-card h2 span {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5f8e8;
+    border-radius: 12px;
+    font-size: 26px;
+}
+
+/* Remedy content */
+
+.remedy-content {
+    color: #52685a;
+    font-size: 17px;
+    line-height: 2.1;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/* Error */
+
+.remedy-error {
+    padding: 28px;
+    text-align: center;
+    color: #a32121;
+    background: #fff0f0;
+    border: 1px solid #ffcaca;
+    border-radius: 15px;
+    font-size: 17px;
+}
+
+/* Disclaimer */
+
+.remedy-disclaimer {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 23px;
+    background: #fff9e9;
+    border: 1px solid #f5e6b7;
+    border-radius: 15px;
+}
+
+.remedy-disclaimer span {
+    font-size: 26px;
+}
+
+.remedy-disclaimer h3 {
+    margin: 0 0 8px;
+    color: #795b17;
+    font-size: 16px;
+}
+
+.remedy-disclaimer p {
+    margin: 0;
+    color: #806b3b;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .remedies-page {
+        padding: 25px 5% 60px;
+    }
+
+    .remedies-heading h1 {
+        font-size: 29px;
+    }
+
+    .remedies-heading p {
+        font-size: 15px;
+    }
+
+    .disease-info,
+    .remedy-card {
+        padding: 20px;
+    }
+
+    .disease-info h2 {
+        font-size: 22px;
+    }
+
+    .info-item strong {
+        font-size: 16px;
+    }
+
+    .remedy-card h2 {
+        font-size: 20px;
+    }
+
+    .remedy-content {
+        font-size: 16px;
+        line-height: 1.9;
+    }
+
+    .remedy-disclaimer {
+        padding: 17px;
+    }
+
+    .remedy-disclaimer p {
+        font-size: 13px;
+    }
+}
+</style>
+
+
+<section class="remedies-page">
+
+    <div class="remedies-container">
+
+        <!-- BACK BUTTON -->
+
+        <div class="remedies-back">
+            <button type="button" onclick="goBack()">
+                ← Back
+            </button>
+        </div>
+
+
+        <!-- PAGE HEADING -->
+
+        <div class="remedies-heading">
+
+            <div class="remedies-icon">
+                🌿
+            </div>
+
+            <h1>Disease Remedies</h1>
+
+            <p>
+                Understand the disease and explore possible
+                treatment and prevention methods for your plant.
+            </p>
+
+        </div>
+
+
+        {% if error %}
+
+            <div class="remedy-error">
+                ⚠️ {{ error }}
+            </div>
+
+        {% elif remedy %}
+
+            <!-- DISEASE INFORMATION -->
+
+            <div class="disease-info">
+
+                <h2>🔬 Disease Information</h2>
+
+                <div class="info-item">
+                    <span>Plant Name</span>
+                    <strong>{{ remedy.crop_name }}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Disease Name</span>
+                    <strong>{{ remedy.disease_name }}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Pathogen / Cause</span>
+                    <strong>{{ remedy.pathogen }}</strong>
+                </div>
+
+            </div>
+
+
+            <!-- ORGANIC REMEDIES -->
+
+            <div class="remedy-card">
+
+                <h2>
+                    <span>🌱</span>
+                    Organic Remedies
+                </h2>
+
+                <div class="remedy-content">{{ remedy.organic_remedies }}</div>
+
+            </div>
+
+
+            <!-- CHEMICAL TREATMENTS -->
+
+            <div class="remedy-card">
+
+                <h2>
+                    <span>🧪</span>
+                    Chemical Treatments
+                </h2>
+
+                <div class="remedy-content">{{ remedy.chemical_treatments }}</div>
+
+            </div>
+
+
+            <!-- PREVENTION METHODS -->
+
+            <div class="remedy-card">
+
+                <h2>
+                    <span>🛡️</span>
+                    Prevention Methods
+                </h2>
+
+                <div class="remedy-content">{{ remedy.prevention_methods }}</div>
+
+            </div>
+
+
+            <!-- DISCLAIMER -->
+
+            <div class="remedy-disclaimer">
+
+                <span>⚠️</span>
+
+                <div>
+                    <h3>Important Agricultural Advice</h3>
+
+                    <p>
+                        Treatment recommendations are provided
+                        for guidance. Before using chemical
+                        treatments, check the product label,
+                        recommended dosage, safety precautions,
+                        and local agricultural guidance.
+                        Consult an agricultural expert when needed.
+                    </p>
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
+```

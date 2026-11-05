@@ -1,103 +1,421 @@
+```html
 {% extends "base.html" %}
 
 {% block content %}
 
-<section class="page-section">
+<style>
+/* ===== CROP PAGE ===== */
 
-    <button onclick="goBack()" class="back-button">
-        ← Back
+.crop-page {
+    min-height: 100vh;
+    padding: 35px 6% 65px;
+    background:
+        radial-gradient(circle at 5% 5%, #e1f5e5 0, transparent 28%),
+        radial-gradient(circle at 95% 40%, #e6f4d9 0, transparent 25%),
+        #f6faf5;
+}
+
+/* ===== BACK BUTTON ===== */
+
+.crop-page .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 17px;
+    margin-bottom: 28px;
+
+    background: #ffffff;
+    color: #216b3c;
+    border: 1px solid #d5e8d8;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.crop-page .back-button:hover {
+    background: #e7f6e9;
+    transform: translateX(-3px);
+}
+
+/* ===== PAGE HEADING ===== */
+
+.crop-page .page-heading {
+    max-width: 750px;
+    margin: 0 auto 32px;
+    text-align: center;
+}
+
+.crop-page .heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 17px;
+
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    border: 1px solid #c3ebce;
+    border-radius: 24px;
+
+    font-size: 39px;
+    box-shadow: 0 8px 22px rgba(34, 120, 61, 0.10);
+}
+
+.crop-page .page-heading h1 {
+    margin-bottom: 10px;
+    color: #174d2d;
+    font-size: clamp(28px, 4vw, 39px);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.crop-page .page-heading p {
+    max-width: 550px;
+    margin: 0 auto;
+    color: #687b6c;
+    font-size: 15px;
+}
+
+/* ===== FORM CARD ===== */
+
+.crop-page .form-card {
+    max-width: 900px;
+    margin: 0 auto;
+
+    padding: 32px;
+    background: rgba(255, 255, 255, 0.96);
+
+    border: 1px solid #e1ece1;
+    border-radius: 23px;
+
+    box-shadow: 0 15px 45px rgba(29, 74, 39, 0.08);
+}
+
+.crop-page .form-title {
+    margin-bottom: 5px;
+    color: #214b30;
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.crop-page .form-description {
+    margin-bottom: 26px;
+    color: #819084;
+    font-size: 13px;
+}
+
+/* ===== INPUT GRID ===== */
+
+.crop-page .input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 23px 25px;
+}
+
+.crop-page .input-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.crop-page .input-group label {
+    margin-bottom: 9px;
+    color: #294b34;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.crop-page .input-group input {
+    width: 100%;
+    min-height: 49px;
+    padding: 12px 15px;
+
+    background: #f9fcf9;
+    color: #23452d;
+
+    border: 1px solid #dce8dc;
+    border-radius: 11px;
+    outline: none;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: border-color 0.25s, box-shadow 0.25s,
+                background 0.25s;
+}
+
+.crop-page .input-group input::placeholder {
+    color: #a0ada2;
+}
+
+.crop-page .input-group input:hover {
+    border-color: #a6d4af;
+}
+
+.crop-page .input-group input:focus {
+    background: #ffffff;
+    border-color: #27964d;
+    box-shadow: 0 0 0 4px rgba(39, 150, 77, 0.10);
+}
+
+/* ===== SUBMIT BUTTON ===== */
+
+.crop-page .submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    width: 100%;
+    min-height: 54px;
+    margin-top: 31px;
+    padding: 14px 20px;
+
+    background: linear-gradient(110deg, #176536, #27964d);
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 750;
+
+    cursor: pointer;
+    box-shadow: 0 7px 18px rgba(27, 116, 56, 0.19);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.crop-page .submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(27, 116, 56, 0.25);
+}
+
+.crop-page .submit-button:active {
+    transform: translateY(0);
+}
+
+/* ===== ERROR BOX ===== */
+
+.crop-page .error-box {
+    max-width: 900px;
+    margin: 24px auto 0;
+    padding: 16px 20px;
+
+    background: #fff1f0;
+    color: #b42318;
+
+    border: 1px solid #ffd0cc;
+    border-left: 5px solid #e5484d;
+    border-radius: 12px;
+
+    font-size: 14px;
+}
+
+/* ===== RESULT CARD ===== */
+
+.crop-page .result-card {
+    position: relative;
+    overflow: hidden;
+
+    max-width: 900px;
+    margin: 30px auto 0;
+    padding: 32px;
+
+    background: linear-gradient(135deg, #ffffff, #effbf0);
+    border: 1px solid #ccebd2;
+    border-radius: 23px;
+
+    text-align: center;
+    box-shadow: 0 12px 35px rgba(31, 110, 53, 0.10);
+
+    animation: cropReveal 0.5s ease;
+}
+
+.crop-page .result-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #18803d, #86d89b);
+}
+
+.crop-page .result-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 66px;
+    height: 66px;
+    margin: 0 auto 13px;
+
+    background: #dcfce7;
+    border-radius: 21px;
+    font-size: 34px;
+}
+
+.crop-page .result-card h2 {
+    color: #315c3c;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.crop-page .crop-name {
+    margin: 12px 0 15px;
+    color: #16803d;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 850;
+    text-transform: capitalize;
+    overflow-wrap: anywhere;
+}
+
+.crop-page .confidence {
+    display: inline-block;
+    margin: 0 auto 16px;
+    padding: 8px 15px;
+
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.crop-page .result-card > p:last-child {
+    max-width: 620px;
+    margin: 0 auto;
+    color: #66796a;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+@keyframes cropReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+@media (max-width: 650px) {
+    .crop-page {
+        padding: 25px 16px 45px;
+    }
+
+    .crop-page .form-card {
+        padding: 23px 18px;
+        border-radius: 18px;
+    }
+
+    .crop-page .input-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .crop-page .result-card {
+        padding: 27px 19px;
+    }
+
+    .crop-page .heading-icon {
+        width: 66px;
+        height: 66px;
+        font-size: 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .crop-page *,
+    .crop-page *::before,
+    .crop-page *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+
+<section class="page-section crop-page">
+
+    <!-- BACK BUTTON -->
+    <button type="button"
+            onclick="goBack()"
+            class="back-button">
+        <span>←</span> Back
     </button>
 
-
+    <!-- PAGE HEADING -->
     <div class="page-heading">
 
-        <div class="heading-icon">
-            🌱
-        </div>
+        <div class="heading-icon">🌱</div>
 
-        <h1>
-            Crop Recommendation
-        </h1>
+        <h1>Crop Recommendation</h1>
 
         <p>
-            Enter your soil and environmental conditions
-            to find the most suitable crop.
+            Discover the most suitable crop for your land
+            using soil nutrients and environmental conditions.
         </p>
 
     </div>
 
-
+    <!-- INPUT FORM -->
     <div class="form-card">
+
+        <h2 class="form-title">Soil & Climate Details</h2>
+
+        <p class="form-description">
+            Enter all six values to generate your crop recommendation.
+        </p>
 
         <form method="POST">
 
-
             <div class="input-grid">
 
-
-                <!-- Nitrogen -->
-
                 <div class="input-group">
-
-                    <label>
-                        Nitrogen (N)
-                    </label>
-
+                    <label for="nitrogen">🌿 Nitrogen (N)</label>
                     <input
+                        id="nitrogen"
                         type="number"
                         step="any"
                         name="N"
                         placeholder="Enter nitrogen value"
                         required>
-
                 </div>
 
-
-                <!-- Phosphorus -->
-
                 <div class="input-group">
-
-                    <label>
-                        Phosphorus (P)
-                    </label>
-
+                    <label for="phosphorus">🧪 Phosphorus (P)</label>
                     <input
+                        id="phosphorus"
                         type="number"
                         step="any"
                         name="P"
                         placeholder="Enter phosphorus value"
                         required>
-
                 </div>
 
-
-                <!-- Potassium -->
-
                 <div class="input-group">
-
-                    <label>
-                        Potassium (K)
-                    </label>
-
+                    <label for="potassium">🌾 Potassium (K)</label>
                     <input
+                        id="potassium"
                         type="number"
                         step="any"
                         name="K"
                         placeholder="Enter potassium value"
                         required>
-
                 </div>
 
-
-                <!-- pH -->
-
                 <div class="input-group">
-
-                    <label>
-                        Soil pH
-                    </label>
-
+                    <label for="ph">💧 Soil pH</label>
                     <input
+                        id="ph"
                         type="number"
                         step="0.01"
                         name="pH"
@@ -105,116 +423,81 @@
                         min="0"
                         max="14"
                         required>
-
                 </div>
 
-
-                <!-- Rainfall -->
-
                 <div class="input-group">
-
-                    <label>
-                        Rainfall
-                    </label>
-
+                    <label for="rainfall">🌧️ Rainfall</label>
                     <input
+                        id="rainfall"
                         type="number"
                         step="any"
                         name="rainfall"
-                        placeholder="Enter rainfall"
+                        placeholder="Enter rainfall value"
+                        min="0"
                         required>
-
                 </div>
 
-
-                <!-- Temperature -->
-
                 <div class="input-group">
-
-                    <label>
-                        Temperature (°C)
-                    </label>
-
+                    <label for="temperature">🌡️ Temperature (°C)</label>
                     <input
+                        id="temperature"
                         type="number"
                         step="any"
                         name="temperature"
                         placeholder="Example: 28"
                         required>
-
                 </div>
-
 
             </div>
 
-
-            <button type="submit"
-                    class="submit-button">
-
-                🌾 Recommend Crop
-
+            <button type="submit" class="submit-button">
+                🌾 Recommend Suitable Crop
+                <span>→</span>
             </button>
 
         </form>
 
     </div>
 
-
-    <!-- ERROR -->
-
+    <!-- ERROR MESSAGE -->
     {% if error %}
-
-    <div class="error-box">
-
+    <div class="error-box" role="alert">
         ⚠️ {{ error }}
-
     </div>
-
     {% endif %}
 
-
-    <!-- RESULT -->
-
+    <!-- PREDICTION RESULT -->
     {% if recommended_crop %}
 
-    <div class="result-card">
+    <div class="result-card" aria-live="polite">
 
-        <div class="result-icon">
-            🌱
-        </div>
+        <div class="result-icon">🌱</div>
 
-        <h2>
-            Recommended Crop
-        </h2>
+        <h2>Your Recommended Crop</h2>
 
         <div class="crop-name">
             {{ recommended_crop }}
         </div>
 
-
-        {% if confidence %}
-
+        {% if confidence is not none and confidence != '' %}
         <p class="confidence">
-
             Model Confidence:
-            <strong>{{ confidence }}%</strong>
-
+            <strong>{{ "%.2f"|format(confidence|float) }}%</strong>
         </p>
-
         {% endif %}
 
-
         <p>
-            Based on the soil and environmental conditions
-            you provided, this crop is the most suitable
-            recommendation from the trained model.
+            Based on the soil nutrients and environmental
+            conditions you entered, your trained machine
+            learning model has selected this crop as its
+            most suitable prediction.
         </p>
 
     </div>
 
     {% endif %}
 
-
 </section>
 
 {% endblock %}
+```

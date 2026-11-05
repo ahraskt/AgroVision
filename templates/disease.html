@@ -1,188 +1,1240 @@
-
 {% extends "base.html" %}
 
 {% block content %}
 
+<style>
+/* =====================================================
+   PLANT DISEASE PAGE - AGROVISION REDESIGN
+===================================================== */
+
+.disease-page {
+    min-height: 100vh;
+    padding: 35px 6% 90px;
+    background:
+        radial-gradient(circle at 5% 10%,
+            rgba(134, 239, 172, 0.20), transparent 25%),
+        linear-gradient(180deg, #f3faf3 0%, #ffffff 100%);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* BACK BUTTON */
+
+.disease-back-row {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+}
+
+.disease-page .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    border: 1px solid #d6e9d9;
+    border-radius: 12px;
+    background: white;
+    color: #176b3a;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(11, 61, 46, 0.05);
+    transition: all 0.25s ease;
+}
+
+.disease-page .back-button:hover {
+    background: #176b3a;
+    color: white;
+    transform: translateX(-4px);
+}
+
+/* PAGE HEADING */
+
+.disease-heading {
+    max-width: 800px;
+    margin: 0 auto 42px;
+    text-align: center;
+}
+
+.disease-icon {
+    width: 82px;
+    height: 82px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #d9f99d, #86efac);
+    box-shadow: 0 12px 30px rgba(22, 163, 74, 0.16);
+    font-size: 43px;
+    animation: leafFloat 3s ease-in-out infinite;
+}
+
+.disease-heading h1 {
+    margin: 0;
+    color: #103e2d;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 850;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.disease-heading p {
+    max-width: 650px;
+    margin: 16px auto 0;
+    color: #63766a;
+    font-size: 16px;
+    line-height: 1.9;
+}
+
+/* MAIN LAYOUT */
+
+.disease-layout {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 30px;
+}
+
+/* UPLOAD CARD */
+
+.disease-card {
+    min-width: 0;
+    padding: 32px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #e0ece1;
+    border-radius: 24px;
+    box-shadow: 0 16px 45px rgba(11, 61, 46, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+.disease-card:hover {
+    box-shadow: 0 22px 55px rgba(11, 61, 46, 0.12);
+}
+
+.upload-title {
+    margin-bottom: 25px;
+}
+
+.upload-title h2 {
+    margin: 0;
+    color: #123f2d;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.upload-title p {
+    margin: 8px 0 0;
+    color: #718176;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* UPLOAD AREA */
+
+.leaf-upload-area {
+    position: relative;
+    padding: 32px 20px;
+    text-align: center;
+    background: linear-gradient(145deg, #f7fcf5, #edf9ee);
+    border: 2px dashed #a8d9b0;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.leaf-upload-area:hover {
+    border-color: #238747;
+    background: #effaf0;
+}
+
+.upload-leaf-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 17px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 6px 18px rgba(11, 61, 46, 0.07);
+    font-size: 34px;
+}
+
+.leaf-upload-area h3 {
+    margin: 0;
+    color: #174b30;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.leaf-upload-area > p {
+    margin: 8px 0;
+    color: #748479;
+    font-size: 13px;
+}
+
+.file-info {
+    margin-top: 18px !important;
+    font-size: 12px !important;
+    color: #698174 !important;
+}
+
+/* HIDE DEFAULT FILE INPUT */
+
+#leaf_image {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+#leaf_image:focus-visible + .upload-photo-button {
+    outline: 3px solid #a3e635;
+    outline-offset: 4px;
+}
+
+.upload-photo-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin-top: 15px;
+    padding: 13px 23px;
+    border-radius: 12px;
+    background: #176b3a;
+    color: white;
+    font-size: 14px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.upload-photo-button:hover {
+    background: #0b3d2e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(11, 61, 46, 0.17);
+}
+
+/* IMAGE PREVIEW */
+
+#image-preview-container {
+    margin: 24px auto 12px;
+    max-width: 100%;
+    animation: fadeIn 0.35s ease;
+}
+
+#image-preview {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    max-height: 260px;
+    margin: 0 auto;
+    object-fit: contain;
+    background: white;
+    border: 4px solid white;
+    border-radius: 17px;
+    box-shadow: 0 8px 24px rgba(11, 61, 46, 0.12);
+}
+
+/* DETECT BUTTON */
+
+.detect-button {
+    width: 100%;
+    min-height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 23px;
+    padding: 15px 22px;
+    border: none;
+    border-radius: 13px;
+    background: linear-gradient(120deg, #176b3a, #22964d);
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    box-shadow: 0 9px 22px rgba(22, 107, 58, 0.18);
+    transition: all 0.25s ease;
+}
+
+.detect-button:hover {
+    background: linear-gradient(120deg, #0b3d2e, #176b3a);
+    transform: translateY(-3px);
+    box-shadow: 0 13px 28px rgba(22, 107, 58, 0.25);
+}
+
+.detect-button:active {
+    transform: translateY(0);
+}
+
+.detect-button:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+}
+
+/* INFORMATION UNDER UPLOAD */
+
+.upload-tips {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 23px;
+    padding: 15px;
+    background: #f5faf5;
+    border: 1px solid #e3eee3;
+    border-radius: 13px;
+}
+
+.upload-tips-icon {
+    font-size: 21px;
+}
+
+.upload-tips h4 {
+    margin: 0 0 4px;
+    color: #225c38;
+    font-size: 13px;
+}
+
+.upload-tips p {
+    margin: 0;
+    color: #718176;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* ERROR MESSAGE */
+
+.disease-error {
+    margin-top: 22px;
+    padding: 16px 18px;
+    color: #a32121;
+    background: #fff0f0;
+    border: 1px solid #ffcaca;
+    border-radius: 13px;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   RESULTS CARD
+===================================================== */
+
+.prediction-result {
+    min-width: 0;
+    margin-top: 0;
+    padding: 30px;
+    background: white;
+    border: 1px solid #d9ebdc;
+    border-radius: 24px;
+    box-shadow: 0 16px 45px rgba(11, 61, 46, 0.08);
+    animation: fadeIn 0.5s ease;
+}
+
+.result-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 23px;
+}
+
+.result-heading > span {
+    width: 53px;
+    height: 53px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e4f8e6;
+    border-radius: 16px;
+    font-size: 28px;
+}
+
+.result-heading h2 {
+    margin: 0;
+    color: #13502f;
+    font-size: 22px;
+    font-weight: 850;
+}
+
+.result-heading p {
+    margin: 5px 0 0;
+    color: #738176;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* RESULT IMAGE */
+
+.result-image {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    margin: 0 auto 24px;
+    object-fit: contain;
+    background: #f4f9f4;
+    border: 1px solid #e4eee4;
+    border-radius: 16px;
+}
+
+/* PREDICTION DETAILS */
+
+.result-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 13px;
+    padding: 17px;
+    background: #f7fbf7;
+    border: 1px solid #e5efe5;
+    border-radius: 14px;
+}
+
+.result-detail span {
+    color: #718176;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.result-detail strong {
+    color: #17472e;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* CONFIDENCE BAR */
+
+.confidence-section {
+    margin-top: 25px;
+    padding: 19px;
+    background: #f2faf3;
+    border: 1px solid #dceede;
+    border-radius: 15px;
+}
+
+.confidence-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 13px;
+}
+
+.confidence-label span {
+    color: #4e6856;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.confidence-label strong {
+    color: #16803c;
+    font-size: 20px;
+    font-weight: 850;
+}
+
+.confidence-track {
+    width: 100%;
+    height: 11px;
+    overflow: hidden;
+    background: #dce9dc;
+    border-radius: 20px;
+}
+
+.confidence-fill {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #15803d);
+    border-radius: 20px;
+    transition: width 1.1s ease;
+}
+
+/* REMEDIES BUTTON */
+
+.remedies-button {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 13px;
+    background: linear-gradient(120deg, #d97706, #f59e0b);
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 9px 22px rgba(217, 119, 6, 0.16);
+    transition: all 0.25s ease;
+}
+
+.remedies-button:hover {
+    background: linear-gradient(120deg, #b45309, #d97706);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 13px 28px rgba(180, 83, 9, 0.22);
+}
+
+.remedies-button:focus-visible {
+    outline: 3px solid #fcd34d;
+    outline-offset: 4px;
+}
+
+/* RESULT NOTE */
+
+.result-note {
+    margin-top: 20px;
+    padding: 15px;
+    color: #715a22;
+    background: #fff9e9;
+    border: 1px solid #f5e6b7;
+    border-radius: 13px;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+/* WHEN THERE IS NO RESULT */
+
+.result-placeholder {
+    min-height: 300px;
+    padding: 35px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(145deg, #f6fbf5, #eaf7eb);
+    border: 1px solid #dceede;
+    border-radius: 24px;
+}
+
+.placeholder-icon {
+    width: 88px;
+    height: 88px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 22px;
+    background: white;
+    border-radius: 27px;
+    font-size: 43px;
+    box-shadow: 0 10px 30px rgba(11, 61, 46, 0.08);
+}
+
+.result-placeholder h2 {
+    color: #174b30;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.result-placeholder p {
+    max-width: 310px;
+    margin-top: 12px;
+    color: #728176;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.placeholder-steps {
+    width: 100%;
+    max-width: 320px;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.placeholder-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e3eee3;
+    border-radius: 12px;
+    color: #47624e;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #dff7e2;
+    color: #176b3a;
+    border-radius: 9px;
+    font-weight: 800;
+}
+
+/* BOTTOM INFORMATION */
+
+.disease-disclaimer {
+    max-width: 1120px;
+    margin: 35px auto 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 20px 23px;
+    background: #ffffff;
+    border: 1px solid #e1ece1;
+    border-radius: 16px;
+}
+
+.disease-disclaimer > span {
+    font-size: 24px;
+}
+
+.disease-disclaimer h3 {
+    margin: 0;
+    color: #214b31;
+    font-size: 14px;
+}
+
+.disease-disclaimer p {
+    margin-top: 5px;
+    color: #728176;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+/* ANIMATIONS */
+
+@keyframes leafFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+    .disease-layout {
+        grid-template-columns: 1fr;
+        max-width: 650px;
+    }
+
+    .prediction-result {
+        grid-row: 2;
+    }
+
+    .result-placeholder {
+        min-height: 270px;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 550px) {
+    .disease-page {
+        padding: 25px 5% 60px;
+    }
+
+    .disease-back-row {
+        margin-bottom: 27px;
+    }
+
+    .disease-heading {
+        margin-bottom: 30px;
+    }
+
+    .disease-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 21px;
+        font-size: 36px;
+    }
+
+    .disease-heading p {
+        font-size: 14px;
+    }
+
+    .disease-layout {
+        gap: 23px;
+    }
+
+    .disease-card,
+    .prediction-result {
+        padding: 23px 18px;
+        border-radius: 19px;
+    }
+
+    .upload-title h2 {
+        font-size: 20px;
+    }
+
+    .leaf-upload-area {
+        padding: 27px 13px;
+    }
+
+    .result-heading h2 {
+        font-size: 19px;
+    }
+
+    .result-detail {
+        padding: 14px;
+    }
+
+    .result-detail strong {
+        font-size: 16px;
+    }
+
+    .disease-disclaimer {
+        padding: 16px;
+    }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+    .disease-page *,
+    .disease-page *::before,
+    .disease-page *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</style>
+
+
+<!-- =====================================================
+     MAIN PAGE
+===================================================== -->
+
 <section class="disease-page">
 
-    <!-- Back button: top-left of the page -->
+    <!-- BACK BUTTON -->
+
     <div class="disease-back-row">
+
         <button type="button"
                 onclick="goBack()"
                 class="back-button">
+
             ← Back
+
         </button>
+
     </div>
 
-    <!-- Page heading -->
+
+    <!-- PAGE HEADING -->
+
     <div class="disease-heading">
+
         <span class="disease-icon">🌿</span>
+
         <h1>Plant Disease Detection</h1>
+
         <p>
             Keep your plants healthy. Upload a leaf image to identify
             its plant type and possible disease using AI.
         </p>
+
     </div>
 
-    <!-- Main upload card -->
-    <div class="disease-card">
 
-        <form method="POST" enctype="multipart/form-data">
+    <!-- TWO-COLUMN LAYOUT -->
+
+    <div class="disease-layout">
+
+
+        <!-- =============================================
+             IMAGE UPLOAD CARD
+        ============================================== -->
+
+        <div class="disease-card">
 
             <div class="upload-title">
+
                 <h2>Upload Your Leaf Photo</h2>
-                <p>Choose a clear image of the affected plant leaf.</p>
-            </div>
 
-            <!-- Image upload area -->
-            <div class="leaf-upload-area">
-
-                <div class="upload-leaf-icon">🍃</div>
-
-                <h3>Choose a leaf image</h3>
-                <p>Select a photo from your device.</p>
-
-                <!-- Image preview -->
-                <div id="image-preview-container" style="display: none;">
-                    <img id="image-preview" alt="Selected leaf preview">
-                </div>
-
-                <p class="file-info">
-                    JPG, JPEG or PNG · Maximum 8 MB
+                <p>
+                    Choose a clear image of the affected plant leaf.
                 </p>
 
-                <input
-                    type="file"
-                    id="leaf_image"
-                    name="leaf_image"
-                    accept=".jpg,.jpeg,.png"
-                    required
-                >
+            </div>
 
-                <label for="leaf_image" class="upload-photo-button">
-                    📷 Choose Photo
-                </label>
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  id="disease-form">
+
+
+                <!-- IMAGE UPLOAD AREA -->
+
+                <div class="leaf-upload-area">
+
+                    <div class="upload-leaf-icon">
+                        🍃
+                    </div>
+
+                    <h3>Choose a leaf image</h3>
+
+                    <p>
+                        Select a photo from your device.
+                    </p>
+
+
+                    <!-- IMAGE PREVIEW -->
+
+                    <div id="image-preview-container"
+                         style="display: none;">
+
+                        <img id="image-preview"
+                             alt="Selected leaf preview">
+
+                    </div>
+
+
+                    <p class="file-info">
+                        JPG, JPEG or PNG · Maximum 8 MB
+                    </p>
+
+
+                    <input
+                        type="file"
+                        id="leaf_image"
+                        name="leaf_image"
+                        accept=".jpg,.jpeg,.png"
+                        required
+                    >
+
+
+                    <label for="leaf_image"
+                           class="upload-photo-button">
+
+                        📷 Choose Photo
+
+                    </label>
+
+                </div>
+
+
+                <!-- SUBMIT BUTTON -->
+
+                <button type="submit"
+                        class="detect-button"
+                        id="detect-button">
+
+                    🔍 Detect Disease
+
+                </button>
+
+            </form>
+
+
+            <!-- ERROR MESSAGE -->
+
+            {% if error %}
+
+            <div class="disease-error" role="alert">
+
+                ⚠️ {{ error }}
 
             </div>
 
-            <!-- Submit image for prediction -->
-            <button type="submit" class="detect-button">
-                🔍 Detect Disease
-            </button>
+            {% endif %}
 
-        </form>
 
-        <!-- Error message -->
-        {% if error %}
-        <div class="disease-error">
-            ⚠️ {{ error }}
+            <!-- UPLOAD TIPS -->
+
+            <div class="upload-tips">
+
+                <span class="upload-tips-icon">💡</span>
+
+                <div>
+
+                    <h4>For better results</h4>
+
+                    <p>
+                        Use a clear, well-lit photo of a single leaf.
+                        Keep the leaf in focus and avoid blurry images.
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
-        {% endif %}
 
-        <!-- Prediction results -->
+
+        <!-- =============================================
+             PREDICTION RESULTS
+        ============================================== -->
+
+
         {% if prediction %}
+
         <div class="prediction-result">
 
             <div class="result-heading">
+
                 <span>🌱</span>
+
                 <div>
+
                     <h2>Analysis Complete</h2>
-                    <p>Here is the result from your leaf image.</p>
+
+                    <p>
+                        Here is the result from your leaf image.
+                    </p>
+
                 </div>
+
             </div>
 
+
+            <!-- UPLOADED IMAGE -->
+
             {% if image_url %}
+
             <img
                 src="{{ image_url }}"
                 alt="Uploaded leaf"
                 class="result-image"
             >
+
             {% endif %}
 
+
+            <!-- PLANT NAME -->
+
             <div class="result-detail">
+
                 <span>🌿 Plant Name</span>
+
                 <strong>{{ plant_name }}</strong>
+
             </div>
+
+
+            <!-- DISEASE NAME -->
 
             <div class="result-detail">
+
                 <span>🔬 Predicted Disease</span>
+
                 <strong>{{ disease_name }}</strong>
+
             </div>
 
-            <!-- Model confidence -->
+
+            <!-- MODEL CONFIDENCE -->
+
             <div class="confidence-section">
 
                 <div class="confidence-label">
+
                     <span>Model Confidence</span>
+
                     <strong>{{ confidence }}%</strong>
+
                 </div>
 
+
                 <div class="confidence-track">
+
                     <div
                         class="confidence-fill"
                         data-confidence="{{ confidence | default(0) }}"
                     ></div>
+
                 </div>
 
             </div>
 
+
+            <!-- REMEDIES BUTTON: SHOW ONLY WHEN A DISEASE IS DETECTED -->
+
+            {% if disease_name and disease_name | lower not in ['healthy', 'healthy leaf'] %}
+            <a href="{{ url_for('remedies', crop_name=plant_name, disease_name=disease_name) }}"
+               class="remedies-button">
+                🌿 View Remedies
+            </a>
+            {% endif %}
+
+
+            <!-- RESULT DISCLAIMER -->
+
             <p class="result-note">
+
                 This is an AI prediction, not a guaranteed diagnosis.
                 Confirm the result by checking the symptoms and seeking
                 expert advice when needed.
+
             </p>
 
         </div>
+
+
+        {% else %}
+
+
+        <!-- INITIAL RESULTS PLACEHOLDER -->
+
+        <div class="result-placeholder">
+
+            <div class="placeholder-icon">
+                🔬
+            </div>
+
+            <h2>Your Analysis Results</h2>
+
+            <p>
+                Your plant analysis will appear here after you upload
+                a leaf image and click Detect Disease.
+            </p>
+
+
+            <div class="placeholder-steps">
+
+                <div class="placeholder-step">
+
+                    <span class="step-number">1</span>
+
+                    <span>Upload a clear leaf image</span>
+
+                </div>
+
+
+                <div class="placeholder-step">
+
+                    <span class="step-number">2</span>
+
+                    <span>Run the AI disease detection</span>
+
+                </div>
+
+
+                <div class="placeholder-step">
+
+                    <span class="step-number">3</span>
+
+                    <span>Review your prediction results</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
         {% endif %}
+
+    </div>
+
+
+    <!-- DISCLAIMER -->
+
+    <div class="disease-disclaimer">
+
+        <span>🛡️</span>
+
+        <div>
+
+            <h3>Important Information</h3>
+
+            <p>
+                The predicted disease and confidence are generated by
+                a machine-learning model. Results depend on image
+                quality and model accuracy. The prediction should
+                support, not replace, professional agricultural advice.
+            </p>
+
+        </div>
 
     </div>
 
 </section>
 
+
+<!-- =====================================================
+     IMAGE PREVIEW AND CONFIDENCE BAR
+===================================================== -->
+
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
     const imageInput = document.getElementById("leaf_image");
     const preview = document.getElementById("image-preview");
     const previewContainer = document.getElementById(
         "image-preview-container"
     );
+    const form = document.getElementById("disease-form");
+    const detectButton = document.getElementById("detect-button");
 
-    // Preview the selected image
+    let previewUrl = null;
+
+
+    // RELEASE THE PREVIOUS PREVIEW URL
+
+    function clearPreview() {
+
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+            previewUrl = null;
+        }
+
+        preview.removeAttribute("src");
+        previewContainer.style.display = "none";
+    }
+
+
+    // PREVIEW THE SELECTED IMAGE
+
     imageInput.addEventListener("change", function () {
+
         const file = this.files[0];
 
+        clearPreview();
+
         if (!file) {
-            preview.removeAttribute("src");
-            previewContainer.style.display = "none";
             return;
         }
 
-        const allowedTypes = ["image/jpeg", "image/png"];
+
+        // ACCEPT JPG, JPEG AND PNG
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png"
+        ];
 
         if (!allowedTypes.includes(file.type)) {
+
             alert("Please select a JPG, JPEG or PNG image.");
+
             this.value = "";
-            preview.removeAttribute("src");
-            previewContainer.style.display = "none";
+
+            return;
+        }
+
+
+        // MAXIMUM FILE SIZE: 8 MB
+
+        if (file.size > 8 * 1024 * 1024) {
+
+            alert("Please select an image smaller than 8 MB.");
+
+            this.value = "";
+
+            return;
+        }
+
+
+        // DISPLAY THE IMAGE
+
+        previewUrl = URL.createObjectURL(file);
+
+        preview.src = previewUrl;
+
+        previewContainer.style.display = "block";
+
+    });
+
+
+    // SHOW LOADING STATE WHEN THE FORM IS SUBMITTED
+
+    form.addEventListener("submit", function (event) {
+
+        const file = imageInput.files[0];
+
+        if (!file) {
+
+            event.preventDefault();
+
+            alert("Please choose a leaf image first.");
+
             return;
         }
 
         if (file.size > 8 * 1024 * 1024) {
+
+            event.preventDefault();
+
             alert("Please select an image smaller than 8 MB.");
-            this.value = "";
-            preview.removeAttribute("src");
-            previewContainer.style.display = "none";
+
             return;
         }
 
-        preview.src = URL.createObjectURL(file);
-        previewContainer.style.display = "block";
+        if (!["image/jpeg", "image/png"].includes(file.type)) {
+
+            event.preventDefault();
+
+            alert("Please select a JPG, JPEG or PNG image.");
+
+            return;
+        }
+
+        detectButton.disabled = true;
+
+        detectButton.textContent = "⏳ Analyzing Leaf Image...";
+
     });
 
-    // Display model confidence as a progress bar
-    document.querySelectorAll(".confidence-fill").forEach(function (bar) {
-        const value = Number(bar.dataset.confidence) || 0;
-        bar.style.width = Math.max(0, Math.min(100, value)) + "%";
+
+    // ANIMATE MODEL CONFIDENCE
+
+    document.querySelectorAll(".confidence-fill").forEach(
+        function (bar) {
+
+            const value = Number(bar.dataset.confidence) || 0;
+
+            const safeValue = Math.max(
+                0,
+                Math.min(100, value)
+            );
+
+            requestAnimationFrame(function () {
+
+                bar.style.width = safeValue + "%";
+
+            });
+
+        }
+    );
+
+
+    // CLEAN UP TEMPORARY PREVIEW URL
+
+    window.addEventListener("beforeunload", function () {
+
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+        }
+
     });
+
+});
 </script>
 
 {% endblock %}
+```

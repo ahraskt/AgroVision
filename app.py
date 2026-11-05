@@ -12,9 +12,12 @@ import json
 import os
 import uuid
 from pathlib import Path
+from leaf_filter import is_valid_leaf
 
+from disease_database import save_disease_prediction
 import joblib
 import mysql.connector
+from database import get_db_connection
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -30,7 +33,7 @@ from werkzeug.utils import secure_filename
 
 # ============================================================
 # PATHS  (all relative to this file – works on any machine)
-# ============================================================
+# ============================================================  
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -40,9 +43,7 @@ DISEASE_MODEL_PATH = (
     BASE_DIR / "plant_disease_model" / "best_model.keras"
 )
 
-CLASS_NAMES_PATH = (
-    BASE_DIR / "plant_disease_model" / "class_names.json"
-)
+CLASS_NAMES_PATH = BASE_DIR / "class_names.json"
 
 # ============================================================
 # FLASK APP
@@ -70,25 +71,45 @@ ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 # Crop recommendation model
 crop_model = joblib.load(CROP_MODEL_PATH)
 
-# Plant disease model
-# ✅ Better — loads only when first needed
+# ==========================================
+# LOAD NEW TRAINED CNN MODEL
+# ==========================================
+
 _disease_model = None
 
 def get_disease_model():
+
     global _disease_model
+
     if _disease_model is None:
-        _disease_model = tf.keras.models.load_model(DISEASE_MODEL_PATH)
+
+        _disease_model = tf.keras.models.load_model(
+            DISEASE_MODEL_PATH,
+            compile=False
+        )
+
+        print("New CNN disease model loaded successfully!")
+
+        print("Input shape:", _disease_model.input_shape)
+        print("Output shape:", _disease_model.output_shape)
+
     return _disease_model
 
-with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as _f:
-    class_names = json.load(_f)
+# ============================================================
+# LOAD DISEASE CLASS NAMES FROM JSON
+# ============================================================
+
+with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as f:
+    class_names = json.load(f)
+
+print("Disease classes loaded:", len(class_names))
 
 # ============================================================
 # ADMIN CREDENTIALS
 # ============================================================
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "admin123"
+ADMIN_USERNAME = "a"
+ADMIN_PASSWORD = "a"
 
 # ============================================================
 # HELPERS
@@ -111,6 +132,7 @@ def get_db_connection():
         password="AgroVision@123",
         database="crop_project"
     )
+
 
     return connection
 
@@ -254,40 +276,61 @@ def disease():
 
         else:
             try:
-                # 1. Read raw bytes
+                # 0. Read raw bytes
                 image_bytes = uploaded_file.read()
+                is_leaf, detected_cat, clip_conf, user_msg = is_valid_leaf(image_bytes)
+                if not is_leaf:
+                    return render_template(
+                    "disease.html",
+                    error=user_msg
+                )
 
-                # 2. Decode into a PIL image
+                
+                # ==========================================
+                # NEW CNN MODEL IMAGE PROCESSING
+                # ==========================================
+
+                # 1. Load uploaded image and resize
                 image = tf.keras.utils.load_img(
                     io.BytesIO(image_bytes),
                     target_size=(224, 224),
-                    color_mode="rgb",
+                    color_mode="rgb"
                 )
 
-                # 3. Convert to NumPy array
+                # 2. Convert image into NumPy array
                 image_array = tf.keras.utils.img_to_array(image)
 
-                # 4. Apply MobileNetV2 preprocessing
-                image_array = (
-                    tf.keras.applications.mobilenet_v2.preprocess_input(
-                        image_array
-                    )
-                )
+                # 3. Ensure float32 format
+                image_array = image_array.astype(np.float32)
 
-                # 5. Add batch dimension
+                # IMPORTANT:
+                # Do NOT use mobilenet_v2.preprocess_input()
+                # The new model already contains normalization layers.
+
+                # 4. Add batch dimension
                 image_array = np.expand_dims(image_array, axis=0)
 
-                # 6. Run inference
-                # ✅ new
-                probabilities = get_disease_model().predict(image_array, verbose=0)[0]
+                # 5. Load new trained CNN model
+                model = get_disease_model()
 
+                # 6. Perform prediction
+                probabilities = model.predict(
+                    image_array,
+                    verbose=0
+                )[0]
+
+                # 7. Get highest probability class
                 best_index = int(np.argmax(probabilities))
+
                 prediction = class_names[best_index]
+
                 confidence = round(
-                    float(probabilities[best_index]) * 100, 2
+                    float(probabilities[best_index]) * 100,
+                    2
                 )
 
-                # 7. Split class name into plant / disease
+
+                # 8. Split class name into plant / disease
                 if "___" in prediction:
                     plant_name, disease_name = prediction.split(
                         "___", 1
@@ -296,19 +339,35 @@ def disease():
                     plant_name = "Unknown"
                     disease_name = prediction
 
-                # 8. Save the uploaded image so it can be displayed
+            
+               
+                # 9. Generate a unique filename
                 safe_name = secure_filename(uploaded_file.filename)
+
                 if not safe_name:
                     safe_name = "leaf_image.jpg"
 
                 unique_name = f"{uuid.uuid4().hex}_{safe_name}"
+
+                # 10. Save image in the uploads folder
                 save_path = UPLOAD_FOLDER / unique_name
                 save_path.write_bytes(image_bytes)
 
+                # 11. Save prediction details and original image to MySQL
+                save_disease_prediction(
+                    image_name=unique_name,
+                    image_data=image_bytes,
+                    plant_name=plant_name,
+                    disease_name=disease_name,
+                    confidence=confidence
+                )
+
+                # 12. Prepare image URL for disease.html
                 image_url = url_for(
                     "static",
                     filename=f"uploads/{unique_name}",
-                )
+)
+
 
             except Exception as e:
                 app.logger.exception("Plant disease prediction failed")
@@ -323,6 +382,76 @@ def disease():
         image_url=image_url,
         error=error,
     )
+
+
+# ============================================================
+# DISEASE REMEDIES
+# ============================================================
+
+@app.route("/remedies")
+def remedies():
+
+    # Get plant and disease names from the URL
+    crop_name = request.args.get("crop_name")
+    disease_name = request.args.get("disease_name")
+
+    if not crop_name or not disease_name:
+        return "Plant name or disease name is missing.", 400
+
+    connection = None
+    cursor = None
+
+    try:
+        # Connect to MySQL
+        connection = get_db_connection()
+
+        cursor = connection.cursor(dictionary=True)
+
+        # Fetch remedies for the detected crop and disease
+        sql = """
+            SELECT
+                crop_name,
+                disease_name,
+                pathogen,
+                organic_remedies,
+                chemical_treatments,
+                prevention_methods
+            FROM disease_remedies
+            WHERE LOWER(TRIM(crop_name)) = LOWER(TRIM(%s))
+            AND LOWER(REPLACE(TRIM(disease_name), '_', ' ')) =
+                LOWER(REPLACE(TRIM(%s), '_', ' '))
+            LIMIT 1
+        """
+
+        cursor.execute(sql, (crop_name, disease_name))
+
+        remedy = cursor.fetchone()
+
+        if remedy is None:
+            return render_template(
+                "remedies.html",
+                remedy=None,
+                error="Remedies not found for this disease."
+            )
+
+        # Open the remedies page
+        return render_template(
+            "remedies.html",
+            remedy=remedy,
+            error=None
+        )
+
+    except mysql.connector.Error:
+        app.logger.exception("Failed to fetch disease remedies")
+
+        return "Unable to load remedies. Please check your database.", 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection and connection.is_connected():
+            connection.close()
 
 
 # ============================================================
@@ -345,16 +474,30 @@ def admin_login():
     error = None
 
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin_logged_in"] = True
-            return redirect(url_for("admin_history"))
-        else:
-            error = "Invalid username or password."
+            return redirect(url_for("admin_dashboard"))
+
+        error = "Invalid username or password."
 
     return render_template("admin_login.html", error=error)
+
+
+
+# ============================================================
+# ADMIN DASHBOARD
+# ============================================================
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+
+    return render_template("admin_dashboard.html")
+
 
 
 # ============================================================
@@ -405,6 +548,61 @@ def admin_history():
             cursor.close()
         if connection:
             connection.close()
+
+
+
+# ============================================================
+# ADMIN DISEASE HISTORY PAGE
+# ============================================================
+
+
+# ============================================================
+# ADMIN DISEASE HISTORY
+# ============================================================
+
+@app.route("/admin/disease-history")
+def disease_history():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT
+                id,
+                image_name,
+                plant_name,
+                disease_name,
+                confidence,
+                created_at
+            FROM disease_predictions
+            ORDER BY created_at DESC
+        """)
+
+        predictions = cursor.fetchall()
+
+        return render_template(
+            "disease_history.html",
+            predictions=predictions
+        )
+
+    except mysql.connector.Error:
+        app.logger.exception("Failed to load disease history")
+        return "Unable to load disease history. Check your database.", 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection and connection.is_connected():
+            connection.close()
+
+
 
 
 # ============================================================
