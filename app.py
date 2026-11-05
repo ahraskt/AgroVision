@@ -14,10 +14,12 @@ import uuid
 from pathlib import Path
 from leaf_filter import is_valid_leaf
 
+from database import get_db_connection
+from crop_database import save_crop_prediction
 from disease_database import save_disease_prediction
 import joblib
 import mysql.connector
-from database import get_db_connection
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -124,17 +126,6 @@ def allowed_file(filename: str) -> bool:
     )
 
 
-def get_db_connection():
-
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Ahras@2002",
-        database="crop_project"
-    )
-
-
-    return connection
 
 
 # ============================================================
@@ -160,9 +151,6 @@ def crop():
 
     if request.method == "POST":
         try:
-            # ------------------------------------------------
-            # Read and validate user input
-            # ------------------------------------------------
             N = float(request.form["N"])
             P = float(request.form["P"])
             K = float(request.form["K"])
@@ -170,68 +158,35 @@ def crop():
             rainfall = float(request.form["rainfall"])
             temperature = float(request.form["temperature"])
 
-            # ------------------------------------------------
-            # Build input DataFrame
-            # ------------------------------------------------
-            user_input = pd.DataFrame(
-                {
-                    "N": [N],
-                    "P": [P],
-                    "K": [K],
-                    "pH": [pH],
-                    "rainfall": [rainfall],
-                    "temperature": [temperature],
-                }
-            )
+            user_input = pd.DataFrame({
+                "N": [N],
+                "P": [P],
+                "K": [K],
+                "pH": [pH],
+                "rainfall": [rainfall],
+                "temperature": [temperature],
+            })
 
-            # ------------------------------------------------
-            # Predict
-            # ------------------------------------------------
+            # Predict crop
             prediction = crop_model.predict(user_input)
             recommended_crop = prediction[0]
 
-            # ------------------------------------------------
-            # Confidence score
-            # ------------------------------------------------
+            # Calculate confidence
             if hasattr(crop_model, "predict_proba"):
                 probabilities = crop_model.predict_proba(user_input)
                 confidence = round(max(probabilities[0]) * 100, 2)
 
-            # ------------------------------------------------
-            # Persist to MySQL
-            # ------------------------------------------------
-            connection = get_db_connection()
-            cursor = connection.cursor()
-
-            sql = """
-                INSERT INTO crop_predictions
-                (
-                    nitrogen,
-                    phosphorus,
-                    potassium,
-                    ph,
-                    rainfall,
-                    temperature,
-                    predicted_crop,
-                    confidence
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            """
-            values = (
-                N,
-                P,
-                K,
-                pH,
-                rainfall,
-                temperature,
-                str(recommended_crop),
-                confidence,
+            # Save to TiDB Cloud
+            save_crop_prediction(
+                nitrogen=N,
+                phosphorus=P,
+                potassium=K,
+                ph=pH,
+                rainfall=rainfall,
+                temperature=temperature,
+                predicted_crop=str(recommended_crop),
+                confidence=confidence
             )
-
-            cursor.execute(sql, values)
-            connection.commit()
-            cursor.close()
-            connection.close()
 
         except ValueError:
             error = "Please enter valid numerical values."
@@ -249,6 +204,7 @@ def crop():
         confidence=confidence,
         error=error,
     )
+
 
 
 # ============================================================
@@ -413,8 +369,8 @@ def remedies():
         # Fetch remedies for the detected crop and disease
         sql = """
             SELECT
-                crop_name,
-                disease_name,
+                crop_name_G,
+                disease_name_G,
                 pathogen,
                 organic_remedies,
                 chemical_treatments,
