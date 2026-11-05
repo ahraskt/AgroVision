@@ -1,0 +1,306 @@
+{
+    "Apple___Apple_scab": {
+        "crop": "Apple",
+        "disease": "Apple Scab",
+        "pathogen": "Fungus (Venturia inaequalis)",
+        "organic": "Prune tree canopies to maximize sunlight and airflow. Apply liquid copper or sulfur sprays early in spring.",
+        "chemical": "Apply Captan, Mancozeb, or Myclobutanil fungicides at pink bud stage through petal fall.",
+        "prevention": "Rake and compost/burn fallen autumn leaves; avoid overhead irrigation."
+    },
+    "Apple___Black_rot": {
+        "crop": "Apple",
+        "disease": "Black Rot (Frogeye Leaf Spot)",
+        "pathogen": "Fungus (Diplodia seriata)",
+        "organic": "Prune out dead wood, mummified fruits, and bark cankers. Apply copper-based sprays during dormancy.",
+        "chemical": "Apply Captan or Thiophanate-methyl sprays beginning at petal fall.",
+        "prevention": "Sanitize pruning shears between cuts; prevent mechanical branch injuries."
+    },
+    "Apple___Cedar_apple_rust": {
+        "crop": "Apple",
+        "disease": "Cedar Apple Rust",
+        "pathogen": "Fungus (Gymnosporangium juniperi-virginianae)",
+        "organic": "Remove nearby eastern red cedar and juniper galls within 500 feet if possible.",
+        "chemical": "Spray Myclobutanil, Mancozeb, or Propiconazole at pink bud stage.",
+        "prevention": "Plant resistant apple varieties like Enterprise, Freedom, or Liberty."
+    },
+    "Apple___healthy": {
+        "crop": "Apple",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Apply organic compost and mulch around tree base annually.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Maintain annual pruning and inspect for codling moth or aphids."
+    },
+    "Blueberry___healthy": {
+        "crop": "Blueberry",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Maintain acidic soil pH (4.5 to 5.5) using pine bark mulch and sulfur pellets.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Ensure good drainage to prevent Phytophthora root rot."
+    },
+    "Cherry_(including_sour)___Powdery_mildew": {
+        "crop": "Cherry",
+        "disease": "Powdery Mildew",
+        "pathogen": "Fungus (Podosphaera clandestina)",
+        "organic": "Spray potassium bicarbonate, horticultural oils, or diluted neem oil (5ml/L).",
+        "chemical": "Apply Myclobutanil, Quinoxyfen, or wettable sulfur fungicides.",
+        "prevention": "Prune inner branches for good air circulation; avoid over-fertilizing with nitrogen."
+    },
+    "Cherry_(including_sour)___healthy": {
+        "crop": "Cherry",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Apply balanced organic fruit tree fertilizer in early spring.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Inspect for cherry fruit flies and monitor soil moisture."
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+        "crop": "Corn (Maize)",
+        "disease": "Gray Leaf Spot",
+        "pathogen": "Fungus (Cercospora zeae-maydis)",
+        "organic": "Bury crop residues after harvest; apply biofungicides like Trichoderma harzianum.",
+        "chemical": "Apply strobilurin or triazole foliar fungicides (e.g., Azoxystrobin, Pyraclostrobin).",
+        "prevention": "Practice a minimum 2-year crop rotation; plant certified resistant corn hybrids."
+    },
+    "Corn_(maize)___Common_rust_": {
+        "crop": "Corn (Maize)",
+        "disease": "Common Rust",
+        "pathogen": "Fungus (Puccinia sorghi)",
+        "organic": "Plant early in the season to evade spore migration; eradicate volunteer corn.",
+        "chemical": "Apply Pyraclostrobin or Propiconazole if rust appears prior to tasseling.",
+        "prevention": "Select rust-resistant hybrids; avoid excess nitrogen application."
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+        "crop": "Corn (Maize)",
+        "disease": "Northern Leaf Blight",
+        "pathogen": "Fungus (Exserohilum turcicum)",
+        "organic": "Deep till post-harvest to speed up residue decomposition; use resistant open-pollinated seed.",
+        "chemical": "Spray Pyraclostrobin + Fluxapyroxad or Azoxystrobin at early symptom onset.",
+        "prevention": "Rotate crops with non-grasses (e.g., soybeans); avoid overhead pivot irrigation."
+    },
+    "Corn_(maize)___healthy": {
+        "crop": "Corn (Maize)",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Maintain balanced N-P-K nutrition and adequate soil organic matter.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Monitor weekly during silking and tasseling stages."
+    },
+    "Grape___Black_rot": {
+        "crop": "Grape",
+        "disease": "Black Rot",
+        "pathogen": "Fungus (Guignardia bidwellii)",
+        "organic": "Remove and destroy dried mummified berries; apply copper soap sprays early.",
+        "chemical": "Spray Mancozeb, Ziram, or Captan from early bloom until 4 weeks post-bloom.",
+        "prevention": "Keep canopy open and upright through proper shoot positioning to dry leaves quickly."
+    },
+    "Grape___Esca_(Black_Measles)": {
+        "crop": "Grape",
+        "disease": "Esca (Black Measles)",
+        "pathogen": "Fungal Complex (Phaeoacremonium / Phaeomoniella)",
+        "organic": "Prune vines only during dry weather; seal large pruning cuts with wound paste.",
+        "chemical": "Apply sodium tetraborate formulations; no cure for infected vines\u2014manage stress.",
+        "prevention": "Disinfect pruning tools with 70% alcohol; replace severely declining vines."
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+        "crop": "Grape",
+        "disease": "Leaf Blight (Isariopsis Spot)",
+        "pathogen": "Fungus (Pseudocercospora vitis)",
+        "organic": "Spray copper oxychloride or sulfur formulations after fruit harvest.",
+        "chemical": "Apply Mancozeb, Dithiocarbamate, or Azoxystrobin foliar sprays.",
+        "prevention": "Ensure good trellis airflow; collect and dispose of fallen autumn leaves."
+    },
+    "Grape___healthy": {
+        "crop": "Grape",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Annual vine training, compost application, and cluster thinning.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Routine leaf inspection for downy mildew and leafhoppers."
+    },
+    "Orange___Haunglongbing_(Citrus_greening)": {
+        "crop": "Orange (Citrus)",
+        "disease": "Citrus Greening (Huanglongbing)",
+        "pathogen": "Bacterium (Candidatus Liberibacter asiaticus) spread by Asian Citrus Psyllid",
+        "organic": "Release parasitic wasps (Tamarixia radiata); apply foliar zinc and manganese to prolong tree life.",
+        "chemical": "Control psyllid vectors with Imidacloprid, Thiamethoxam, or Cypermethrin.",
+        "prevention": "Plant only certified disease-free rootstock; remove severely infected trees promptly."
+    },
+    "Peach___Bacterial_spot": {
+        "crop": "Peach",
+        "disease": "Bacterial Spot",
+        "pathogen": "Bacterium (Xanthomonas arboricola pv. pruni)",
+        "organic": "Apply dormant fixed copper sprays in late autumn after leaf fall and before bud break.",
+        "chemical": "Apply Oxytetracycline (Mycoshield) or low-rate copper during the growing season.",
+        "prevention": "Plant windbreaks to prevent sandblasting bark wounds; select resistant cultivars."
+    },
+    "Peach___healthy": {
+        "crop": "Peach",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Prune for an open-center vase canopy to maximize sunlight penetration.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Inspect trunks for peach tree borer frass and monitor fruit development."
+    },
+    "Pepper,_bell___Bacterial_spot": {
+        "crop": "Pepper (Bell)",
+        "disease": "Bacterial Spot",
+        "pathogen": "Bacterium (Xanthomonas euvesicatoria)",
+        "organic": "Spray copper octanoate combined with Bacillus subtilis bio-bactericide.",
+        "chemical": "Apply copper hydroxide mixed with Mancozeb to reduce bacterial copper resistance.",
+        "prevention": "Use hot-water treated certified seeds; never work in fields when leaves are wet."
+    },
+    "Pepper,_bell___healthy": {
+        "crop": "Pepper (Bell)",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Mulch soil to conserve moisture; ensure consistent calcium levels to prevent blossom end rot.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Maintain proper plant spacing and crop rotation with non-solanaceous crops."
+    },
+    "Potato___Early_blight": {
+        "crop": "Potato",
+        "disease": "Early Blight",
+        "pathogen": "Fungus (Alternaria solani)",
+        "organic": "Remove lower infected foliage. Spray copper soap or cold-pressed neem oil (5ml/L).",
+        "chemical": "Apply Chlorothalonil, Mancozeb, or Azoxystrobin every 7\u201310 days.",
+        "prevention": "Maintain a 3-year crop rotation; use drip irrigation to prevent wet foliage."
+    },
+    "Potato___Late_blight": {
+        "crop": "Potato",
+        "disease": "Late Blight",
+        "pathogen": "Oomycete (Phytophthora infestans) \u2014 High Risk!",
+        "organic": "Destroy and bag infected plants immediately. Apply protective copper sulfate sprays.",
+        "chemical": "Apply systemic fungicides like Metalaxyl, Cymoxanil, or Fluopicolide immediately.",
+        "prevention": "Plant certified disease-free seed tubers; eliminate volunteer potatoes and cull piles."
+    },
+    "Potato___healthy": {
+        "crop": "Potato",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Hill soil properly around developing tubers to prevent sunlight exposure and greening.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Ensure good drainage and maintain consistent soil moisture."
+    },
+    "Raspberry___healthy": {
+        "crop": "Raspberry",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Prune out spent floricanes after fruiting; mulch with wood chips.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Ensure well-drained sandy loam soil to prevent Phytophthora cane blight."
+    },
+    "Soybean___healthy": {
+        "crop": "Soybean",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Inoculate seeds with Bradyrhizobium japonicum for natural nitrogen fixation.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Rotate crops with corn or small grains to break pest life cycles."
+    },
+    "Squash___Powdery_mildew": {
+        "crop": "Squash",
+        "disease": "Powdery Mildew",
+        "pathogen": "Fungus (Podosphaera xanthii)",
+        "organic": "Spray milk solution (40% milk, 60% water), potassium bicarbonate, or neem oil.",
+        "chemical": "Apply Myclobutanil, Trifloxystrobin, or sulfur at first sign of white spots.",
+        "prevention": "Space plants generously (4\u20136 feet); plant powdery mildew-resistant squash hybrids."
+    },
+    "Strawberry___Leaf_scorch": {
+        "crop": "Strawberry",
+        "disease": "Leaf Scorch",
+        "pathogen": "Fungus (Diplocarpon earlianum)",
+        "organic": "Remove old infected leaves after fruiting; apply organic copper soap spray.",
+        "chemical": "Apply Captan or Thiophanate-methyl sprays early in spring as new growth emerges.",
+        "prevention": "Plant on raised beds with clean pine straw mulch to prevent soil splashing."
+    },
+    "Strawberry___healthy": {
+        "crop": "Strawberry",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Provide consistent drip irrigation and clean straw mulching.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Renew strawberry beds every 3 to 4 years to maintain plant vigor."
+    },
+    "Tomato___Bacterial_spot": {
+        "crop": "Tomato",
+        "disease": "Bacterial Spot",
+        "pathogen": "Bacterium (Xanthomonas vesicatoria)",
+        "organic": "Apply copper-based bactericide mixed with Bacillus subtilis biofungicide.",
+        "chemical": "Apply copper hydroxide mixed with Mancozeb to enhance bacterial kill rate.",
+        "prevention": "Avoid overhead watering; disinfect stakes and cages with 10% bleach."
+    },
+    "Tomato___Early_blight": {
+        "crop": "Tomato",
+        "disease": "Early Blight",
+        "pathogen": "Fungus (Alternaria linariae)",
+        "organic": "Prune lower leaves up to 18 inches off the ground; apply heavy mulch to stop soil splashing.",
+        "chemical": "Apply Mancozeb, Chlorothalonil, or Azoxystrobin every 7\u201314 days.",
+        "prevention": "Stake plants upright for airflow; water strictly at soil level via drip irrigation."
+    },
+    "Tomato___Late_blight": {
+        "crop": "Tomato",
+        "disease": "Late Blight",
+        "pathogen": "Oomycete (Phytophthora infestans) \u2014 High Risk!",
+        "organic": "Promptly pull and bag infected plants. Spray preventative fixed copper on surrounding plants.",
+        "chemical": "Apply Chlorothalonil, Famoxadone + Cymoxanil, or Dimethomorph immediately.",
+        "prevention": "Never plant tomatoes next to potatoes; avoid overhead sprinkler systems."
+    },
+    "Tomato___Leaf_Mold": {
+        "crop": "Tomato",
+        "disease": "Leaf Mold",
+        "pathogen": "Fungus (Passalora fulva)",
+        "organic": "Increase greenhouse ventilation; lower relative humidity below 85% with exhaust fans.",
+        "chemical": "Apply copper fungicides, Chlorothalonil, or Difenoconazole.",
+        "prevention": "Prune suckers to open internal air channels; space greenhouse plants generously."
+    },
+    "Tomato___Septoria_leaf_spot": {
+        "crop": "Tomato",
+        "disease": "Septoria Leaf Spot",
+        "pathogen": "Fungus (Septoria lycopersici)",
+        "organic": "Remove infected lower leaves immediately upon appearance. Apply organic copper spray.",
+        "chemical": "Apply Chlorothalonil or Mancozeb sprays at 7\u201310 day intervals.",
+        "prevention": "Deep-till soil in autumn to bury fungal spores; rotate away from nightshades for 3 years."
+    },
+    "Tomato___Spider_mites Two-spotted_spider_mite": {
+        "crop": "Tomato",
+        "disease": "Two-Spotted Spider Mites",
+        "pathogen": "Pest (Tetranychus urticae)",
+        "organic": "Release predatory mites (Phytoseiulus persimilis); spray insecticidal soap or neem oil.",
+        "chemical": "Apply miticides like Abamectin, Bifenazate, or Spiromesifen to leaf undersides.",
+        "prevention": "Maintain adequate irrigation; wash dusty field roadways which promote mite outbreaks."
+    },
+    "Tomato___Target_Spot": {
+        "crop": "Tomato",
+        "disease": "Target Spot",
+        "pathogen": "Fungus (Corynespora cassiicola)",
+        "organic": "Prune dense lower foliage to speed up canopy drying after rains.",
+        "chemical": "Apply Azoxystrobin, Boscalid, or Pyraclostrobin foliar sprays.",
+        "prevention": "Keep plants and fruit off bare ground using trellises and plastic mulch."
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+        "crop": "Tomato",
+        "disease": "Tomato Yellow Leaf Curl Virus (TYLCV)",
+        "pathogen": "Virus (TYLCV) transmitted by Whiteflies (Bemisia tabaci)",
+        "organic": "Install yellow sticky insect traps; spray neem oil or pyrethrins to control whiteflies.",
+        "chemical": "Apply systemic insecticides (e.g., Imidacloprid, Dinotefuran) targeting whitefly nymphs.",
+        "prevention": "Use fine 50-mesh insect netting in nurseries; remove and destroy infected plants."
+    },
+    "Tomato___Tomato_mosaic_virus": {
+        "crop": "Tomato",
+        "disease": "Tomato Mosaic Virus (ToMV)",
+        "pathogen": "Virus (ToMV) \u2014 Mechanically Transmitted",
+        "organic": "Wash hands with milk or soap before touching plants; destroy infected plants immediately.",
+        "chemical": "No chemical cure exists for viral plant infections.",
+        "prevention": "Smokers must wash hands (tobacco harbors mosaic virus); plant resistant seed varieties."
+    },
+    "Tomato___healthy": {
+        "crop": "Tomato",
+        "disease": "Healthy Leaf",
+        "pathogen": "None (Plant is healthy)",
+        "organic": "Provide consistent moisture and support with sturdy cages or stakes.",
+        "chemical": "No chemicals needed.",
+        "prevention": "Inspect leaf undersides weekly for early pests or discoloration."
+    }
+}

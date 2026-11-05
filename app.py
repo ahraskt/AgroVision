@@ -107,8 +107,8 @@ def get_db_connection():
 
     connection = mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="Ahras@2002",
+        user="agrovision_app",
+        password="AgroVision@123",
         database="crop_project"
     )
 
@@ -310,12 +310,9 @@ def disease():
                     filename=f"uploads/{unique_name}",
                 )
 
-            except Exception:
+            except Exception as e:
                 app.logger.exception("Plant disease prediction failed")
-                error = (
-                    "Could not process this image. "
-                    "Please upload a valid leaf photo."
-                )
+                error = f"Processing error: {str(e)}"
 
     return render_template(
         "disease.html",
